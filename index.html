@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <script type="module">
+    <!-- <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
         import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
@@ -31,27 +31,27 @@
         const analytics = getAnalytics(app);
 
         // Initialize Realtime Database
-        const db = getDatabase(app);
+        const db = getDatabase(app); -->
 
 
-        // // Write data to the database
-        // window.saveHealthToFirebase = function (healthValue) {
-        //     const healthData = {
-        //         health: healthValue ?? 0, // Use 0 if healthValue is undefined
-        //         timestamp: new Date().toISOString()
-        //     };
+    <!-- // // Write data to the database
+    // window.saveHealthToFirebase = function (healthValue) {
+    // const healthData = {
+    // health: healthValue ?? 0, // Use 0 if healthValue is undefined
+    // timestamp: new Date().toISOString()
+    // };
 
-        //     console.log("Health data to save:", healthData); // Log the data being saved
+    // console.log("Health data to save:", healthData); // Log the data being saved
 
-        //     set(ref(db, 'users/health'), healthData)
-        //         .then(() => console.log('Health value saved!'))
-        //         .catch((error) => console.error('Error saving health:', error));
-        // };
+    // set(ref(db, 'users/health'), healthData)
+    // .then(() => console.log('Health value saved!'))
+    // .catch((error) => console.error('Error saving health:', error));
+    // };
 
 
-        // // Expose the Firebase function to the global scope (if needed for debugging)
-        // window.saveHealthToFirebase = saveHealthToFirebase;
-    </script>
+    // // Expose the Firebase function to the global scope (if needed for debugging)
+    // window.saveHealthToFirebase = saveHealthToFirebase;
+    </script> -->
 
     <!-- <h1>USER DATABASE</h1>
     <input type="text" placeholder="name" id="nameField">
@@ -59,7 +59,6 @@
     <button onclick="writeData()">Submit</button>
     <button id="saveHealthBtn">Save Health Value</button> New Button -->
 
-    <script src="index.js"></script>
     <script src="letsgrabamatch.js"></script>
 
 </body>
