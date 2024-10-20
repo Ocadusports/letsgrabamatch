@@ -20,19 +20,19 @@ function preload() {
     animations = {
         char1: {
             sleep: loadImage('char1_sleep.png'),
-            normal: loadImage('char1_normal.png'),
+            normal: loadImage('char1.png'),
             powerup: loadImage('char1_powerup.png'),
             onFire: loadImage('char1_fire.png'),
         },
         char2: {
             sleep: loadImage('char1_sleep.png'),
-            normal: loadImage('char1_normal.png'),
+            normal: loadImage('char2.png'),
             powerup: loadImage('char1_powerup.png'),
             onFire: loadImage('char1_fire.png'),
         },
         char3: {
             sleep: loadImage('char1_sleep.png'),
-            normal: loadImage('char1_normal.png'),
+            normal: loadImage('char3.png'),
             powerup: loadImage('char1_powerup.png'),
             onFire: loadImage('char1_fire.png'),
         },
