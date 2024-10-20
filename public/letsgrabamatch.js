@@ -98,7 +98,7 @@ function setup() {
     let button = createButton('Enable Motion');
     button.position(windowWidth / 2, windowHeight / 1.5
     );
-    button.mousePressed(requestMotionPermission);
+    button.touchStarted(requestMotionPermission);
     button.hide(); // Hide initially, only show in screen 3
 
     // Store button reference to show it later
@@ -133,7 +133,7 @@ function drawWelcomeScreen() {
 
     let nextButton = createButton('Next');
     nextButton.position(width / 2 - 40, height / 2);
-    nextButton.mousePressed(() => {
+    nextButton.touchStarted(() => {
         screen = 2; // Move to character select screen
         nextButton.remove(); // Remove the button after clicking
     });
@@ -150,8 +150,11 @@ function drawCharacterSelectScreen() {
         image(img, width / 4 * (i + 1) - 50, height / 3, 100, 100);
 
         // Check if character is clicked
-        if (mouseIsPressed && mouseX > width / 4 * (i + 1) - 50 && mouseX < width / 4 * (i + 1) + 50 &&
-            mouseY > height / 3 && mouseY < height / 3 + 100) {
+        if (touchStarted &&
+            mouseX > width / 4 * (i + 1) - 50 &&
+            mouseX < width / 4 * (i + 1) + 50 &&
+            mouseY > height / 3 &&
+            mouseY < height / 3 + 100) {
             selectedCharacter = `char${i + 1}`;
             screen = 3; // Move to main app screen
         }
