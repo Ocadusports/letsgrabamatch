@@ -119,9 +119,9 @@ function draw() {
 
 
 // Display acceleration values for debugging
-// text(`Motion X: ${motionValue.x}`, 10, 80);
-// text(`Motion Y: ${motionValue.y}`, 10, 110);
-// text(`Motion Z: ${motionValue.z}`, 10, 140);
+text(`Motion X: ${motionValue.x}`, 10, 80);
+text(`Motion Y: ${motionValue.y}`, 10, 110);
+text(`Motion Z: ${motionValue.z}`, 10, 140);
 
 
 
