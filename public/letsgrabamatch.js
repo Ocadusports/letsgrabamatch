@@ -166,7 +166,7 @@ function drawMainAppScreen() {
     image(animation, width / 2 - 50, height / 3, 100, 100);
 
     // Display health bar
-    fill(0, 255, 0);
+    fill(255, 0, 0);
     rect(10, 10, health * 3, 20);
     fill(0);
     text(health.toFixed(0) + "%", 320, 25);
