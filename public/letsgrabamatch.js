@@ -91,14 +91,14 @@ function adjustHealth() {
 function setup() {
     createCanvas(windowWidth, windowHeight);
     noStroke();
-    textSize(64);
+    textSize(16);
     fill(0);
 
     // Create a button to request permission
     let button = createButton('Enable Motion');
     button.position(windowWidth / 2, windowHeight / 1.5
     );
-    button.touchStarted(requestMotionPermission);
+    button.mousePressed(requestMotionPermission);
     button.hide(); // Hide initially, only show in screen 3
 
     // Store button reference to show it later
@@ -133,7 +133,7 @@ function drawWelcomeScreen() {
 
     let nextButton = createButton('Next');
     nextButton.position(width / 2 - 40, height / 2);
-    nextButton.touchStarted(() => {
+    nextButton.mousePressed(() => {
         screen = 2; // Move to character select screen
         nextButton.remove(); // Remove the button after clicking
     });
@@ -141,7 +141,7 @@ function drawWelcomeScreen() {
 
 function drawCharacterSelectScreen() {
     textAlign(CENTER, CENTER);
-    textSize(42);
+    textSize(24);
     text('Choose your character:', width / 2, 50);
 
     // Display character images as selectable options
@@ -150,11 +150,8 @@ function drawCharacterSelectScreen() {
         image(img, width / 4 * (i + 1) - 50, height / 3, 100, 100);
 
         // Check if character is clicked
-        if (touchStarted &&
-            mouseX > width / 4 * (i + 1) - 50 &&
-            mouseX < width / 4 * (i + 1) + 50 &&
-            mouseY > height / 3 &&
-            mouseY < height / 3 + 100) {
+        if (mouseIsPressed && mouseX > width / 4 * (i + 1) - 50 && mouseX < width / 4 * (i + 1) + 50 &&
+            mouseY > height / 3 && mouseY < height / 3 + 100) {
             selectedCharacter = `char${i + 1}`;
             screen = 3; // Move to main app screen
         }
@@ -169,7 +166,7 @@ function drawMainAppScreen() {
     image(animation, width / 2 - 50, height / 3, 100, 100);
 
     // Display health bar
-    fill(0, 0, 255);
+    fill(0, 255, 255);
     rect(10, 10, health * 3, 20);
     fill(0);
     text(health.toFixed(0) + "%", 320, 25);
