@@ -91,7 +91,7 @@ function adjustHealth() {
 function setup() {
     createCanvas(windowWidth, windowHeight);
     noStroke();
-    textSize(16);
+    textSize(64);
     fill(0);
 
     // Create a button to request permission
@@ -141,24 +141,34 @@ function drawWelcomeScreen() {
 
 function drawCharacterSelectScreen() {
     textAlign(CENTER, CENTER);
-    textSize(24);
+    textSize(42);
     text('Choose your character:', width / 2, 50);
 
     // Display character images as selectable options
     for (let i = 0; i < characters.length; i++) {
         let img = characters[i];
-        image(img, width / 4 * (i + 1) - 50, height / 3, 100, 100);
+        let x = width / 4 * (i + 1) - 50; // X position of the image
+        let y = height / 3; // Y position of the image
 
-        // Check if character is clicked
-        if (touchStarted &&
-            mouseX > width / 4 * (i + 1) - 50 &&
-            mouseX < width / 4 * (i + 1) + 50 &&
-            mouseY > height / 3 &&
-            mouseY < height / 3 + 100) {
-            selectedCharacter = `char${i + 1}`;
-            screen = 3; // Move to main app screen
+        image(img, x, y, 100, 100); // Display the character image
+
+        // Check if the touch is within the image boundaries
+        if (touchInImageBounds(x, y, 100, 100)) {
+            selectedCharacter = `char${i + 1}`; // Select the character
+            screen = 3; // Move to the main app screen
         }
     }
+}
+
+// Helper function to check if touch is within image boundaries
+function touchInImageBounds(x, y, imgWidth, imgHeight) {
+    if (touchIsDown) {
+        return (
+            touchX > x && touchX < x + imgWidth &&
+            touchY > y && touchY < y + imgHeight
+        );
+    }
+    return false;
 }
 
 function drawMainAppScreen() {
