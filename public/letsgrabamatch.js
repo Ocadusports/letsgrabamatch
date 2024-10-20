@@ -128,7 +128,7 @@ text(`Motion Z: ${motionValue.z}`, 10, 140);
 
 function drawWelcomeScreen() {
     textAlign(CENTER, CENTER);
-    textSize(32);
+    textSize(33);
     text('Welcome!', width / 2, height / 3);
 
     let nextButton = createButton('Next');
