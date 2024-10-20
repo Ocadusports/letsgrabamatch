@@ -34,32 +34,33 @@
         const db = getDatabase(app);
 
 
-        // Write data to the database
-        window.saveHealthToFirebase = function (healthValue) {
-            const healthData = {
-                health: healthValue ?? 0, // Use 0 if healthValue is undefined
-                timestamp: new Date().toISOString()
-            };
+        // // Write data to the database
+        // window.saveHealthToFirebase = function (healthValue) {
+        //     const healthData = {
+        //         health: healthValue ?? 0, // Use 0 if healthValue is undefined
+        //         timestamp: new Date().toISOString()
+        //     };
 
-            console.log("Health data to save:", healthData); // Log the data being saved
+        //     console.log("Health data to save:", healthData); // Log the data being saved
 
-            set(ref(db, 'users/health'), healthData)
-                .then(() => console.log('Health value saved!'))
-                .catch((error) => console.error('Error saving health:', error));
-        };
+        //     set(ref(db, 'users/health'), healthData)
+        //         .then(() => console.log('Health value saved!'))
+        //         .catch((error) => console.error('Error saving health:', error));
+        // };
 
 
-        // Expose the Firebase function to the global scope (if needed for debugging)
-        window.saveHealthToFirebase = saveHealthToFirebase;
+        // // Expose the Firebase function to the global scope (if needed for debugging)
+        // window.saveHealthToFirebase = saveHealthToFirebase;
     </script>
 
-    <h1>USER DATABASE</h1>
+    <!-- <h1>USER DATABASE</h1>
     <input type="text" placeholder="name" id="nameField">
     <input type="text" placeholder="age" id="ageField">
     <button onclick="writeData()">Submit</button>
-    <button id="saveHealthBtn">Save Health Value</button> <!-- New Button -->
+    <button id="saveHealthBtn">Save Health Value</button> New Button -->
 
     <script src="index.js"></script>
+    <script src="letsgrabamatch.js"></script>
 
 </body>
 
