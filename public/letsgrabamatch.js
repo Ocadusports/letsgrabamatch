@@ -2,7 +2,7 @@ let screen = 1;
 let selectedCharacter = null;
 let characters = [];
 let animations = {};
-
+let nextButton;
 
 let health = 20; // Start health at 20%
 let motionValue = { x: 0, y: 0, z: 0 };
@@ -119,9 +119,9 @@ function draw() {
 
 
 // Display acceleration values for debugging
-text(`Motion X: ${motionValue.x}`, 10, 80);
-text(`Motion Y: ${motionValue.y}`, 10, 110);
-text(`Motion Z: ${motionValue.z}`, 10, 140);
+text(Motion X: ${ motionValue.x }, 10, 80);
+text(Motion Y: ${ motionValue.y }, 10, 110);
+text(Motion Z: ${ motionValue.z }, 10, 140);
 
 
 
@@ -131,12 +131,24 @@ function drawWelcomeScreen() {
     textSize(33);
     text('Welcome!', width / 2, height / 3);
 
-    let nextButton = createButton('Next');
-    nextButton.position(width / 2 - 40, height / 2);
-    nextButton.mousePressed(() => {
-        screen = 2; // Move to character select screen
-        nextButton.remove(); // Remove the button after clicking
-    });
+    if (!nextButton) {
+        nextButton = createButton('Next');
+        nextButton.position(width / 2 - 40, height / 2);
+
+        // Handle the Next button click or touch
+        nextButton.mousePressed(() => {
+            screen = 2; // Move to character select screen
+            nextButton.remove(); // Remove the button after clicking
+            nextButton = null; // Clear the reference
+        });
+
+        // Add touch support for iOS
+        nextButton.touchStarted(() => {
+            screen = 2; // Move to character select screen
+            nextButton.remove(); // Remove the button after clicking
+            nextButton = null; // Clear the reference
+        });
+    }
 }
 
 function drawCharacterSelectScreen() {
@@ -147,13 +159,15 @@ function drawCharacterSelectScreen() {
     // Display character images as selectable options
     for (let i = 0; i < characters.length; i++) {
         let img = characters[i];
-        image(img, width / 4 * (i + 1) - 50, height / 3, 100, 100);
+        let x = width / 4 * (i + 1) - 50; // X position of the image
+        let y = height / 3;               // Y position of the image
 
-        // Check if character is clicked
-        if (mouseIsPressed && mouseX > width / 4 * (i + 1) - 50 && mouseX < width / 4 * (i + 1) + 50 &&
-            mouseY > height / 3 && mouseY < height / 3 + 100) {
-            selectedCharacter = `char${i + 1}`;
-            screen = 3; // Move to main app screen
+        image(img, x, y, 100, 100); // Display the character image
+
+        // Check if the touch or click is within the image boundaries
+        if (touchInImageBounds(x, y, 100, 100)) {
+            selectedCharacter = char${ i + 1 }; // Select the character
+            screen = 3; // Move to the main app screen
         }
     }
 }
@@ -177,10 +191,21 @@ function drawMainAppScreen() {
     }
 }
 
+// Helper function to check if touch is within the image boundaries
+function touchInImageBounds(x, y, imgWidth, imgHeight) {
+    if (touchIsDown) {
+        return (
+            touchX > x && touchX < x + imgWidth &&
+            touchY > y && touchY < y + imgHeight
+        );
+    }
+    return false;
+}
+
 function getAnimationForHealth() {
     if (health <= 0) {
         return animations[selectedCharacter].sleep;
-    } else if (health <= 30) {
+    } else if (health <= 10) {
         return animations[selectedCharacter].normal;
     } else if (health <= 80) {
         return animations[selectedCharacter].powerup;
@@ -188,4 +213,3 @@ function getAnimationForHealth() {
         return animations[selectedCharacter].onFire;
     }
 }
-
