@@ -3,7 +3,7 @@ let screen = 1; // Track the current screen (1: Welcome, 2: Character Selection,
 let selectedCharacter = null; // Store the selected character
 let characters = []; // Array to hold character images
 let animations = {}; // Store animations for each character
-let nextButton = null; // Store the reference to the Next button
+// let nextButton = null; // Store the reference to the Next button
 
 // Health management variables
 let health = 20; // Start health at 20%
@@ -52,15 +52,16 @@ function setup() {
 
     // Create the "Enable Motion" button (only used on the Main App screen)
     let button = createButton('Enable Motion');
-    button.position(windowWidth / 2, windowHeight / 1.5);
+    button.position(windowWidth / 2 - 100, windowHeight / 1.5);
+    button.class('custom-button'); // Use custom styling for consistency
     button.mousePressed(requestMotionPermission); // Handle motion permission request
-    button.hide(); // Initially hide the button until needed
-    window.motionButton = button; // Store the button reference globally
+    button.hide(); // Hide initially until needed
+    window.motionButton = button; // Store button reference globally
 }
 
 // Main draw loop to handle different screens
 function draw() {
-    background(220); // Clear the screen
+    background(255); // white bg
 
     if (screen === 1) {
         drawWelcomeScreen(); // Show Welcome Screen
@@ -73,51 +74,49 @@ function draw() {
 
 // --- Welcome Screen ---
 function drawWelcomeScreen() {
+    background('#87CEFA'); // Light blue background
+
+    // Display the "Let's Grab A Match!" message (centered)
     textAlign(CENTER, CENTER);
-    textSize(33);
-    text('Welcome!', width / 2, height / 3);
+    textSize(50);
+    fill(0);
+    text("Let's Grab A Match!", width / 2, height / 3);
 
-    // Create the Next button if it doesn't exist
-    if (!nextButton) {
-        nextButton = createButton('Next');
-        nextButton.position(width / 2 - 40, height / 2);
 
-        // Handle button click to switch to Character Selection Screen
-        nextButton.mousePressed(() => {
-            screen = 2; // Move to Character Selection
-            nextButton.remove(); // Remove the button after clicking
-            nextButton = null; // Clear the reference
-        });
-
-        // Optional: Add touch support for mobile devices (iOS)
-        nextButton.touchStarted(() => {
-            screen = 2; // Move to Character Selection
-            nextButton.remove(); // Remove the button after clicking
-            nextButton = null; // Clear the reference
-        });
-    }
+    // Create a custom Next button to move to character selection
+    createCustomButton('Next', width / 2, height / 2 + 100, () => {
+        screen = 2; // Move to the character selection screen
+    });
 }
 
 // --- Character Selection Screen ---
 function drawCharacterSelectScreen() {
     textAlign(CENTER, CENTER);
-    textSize(24);
-    text('Choose your character:', width / 2, 50);
+    textSize(32);
+    fill(0);
+    text('CHOOSE A CHARACTER', width / 2, 50);
 
-    // Display each character image and check for selection
+    // Display the character images with spacing
     for (let i = 0; i < characters.length; i++) {
         let img = characters[i];
-        let x = width / 4 * (i + 1) - 50; // X position for the image
-        let y = height / 3; // Y position for the image
+        let x = width / 2 - 50;
+        let y = 150 + i * 150;
 
-        image(img, x, y, 100, 100); // Display the character image
+        image(img, x, y, 100, 100); // Display character image
 
-        // Check if the user touches/clicks inside the image area
+        // Check for character selection
         if (touchInImageBounds(x, y, 100, 100)) {
-            selectedCharacter = `char${i + 1}`; // Store the selected character
-            screen = 3; // Move to Main App Screen
+            selectedCharacter = `char${i + 1}`; // Store selected character
         }
     }
+    // Create a custom Next button to move to the main app screen
+    createCustomButton('Next', width / 2, height - 100, () => {
+        if (selectedCharacter) {
+            screen = 3; // Move to the main app screen
+        } else {
+            alert('Please select a character!');
+        }
+    });
 }
 
 // --- Main App Screen ---
@@ -126,13 +125,22 @@ function drawMainAppScreen() {
 
     // Display the appropriate character animation based on health
     let animation = getAnimationForHealth();
-    image(animation, width / 2 - 50, height / 3, 100, 100);
+    image(animation, width / 2 - 75, height / 3, 150, 150);
 
-    // Display the health bar
-    fill(0, 255, 255); // Set color of the health bar
-    rect(10, 10, health * 3, 20); // Health bar width based on health value
-    fill(0);
-    text(health.toFixed(0) + "%", 320, 25); // Display health percentage
+    // Draw the energy bar at the bottom
+    textAlign(LEFT);
+    textSize(24);
+    text('ENERGY BAR:', width / 2 - 100, height - 150);
+
+    // Draw the filled portion of the energy bar based on health
+    fill('#FFC107');
+    rect(width / 2 - 100, height - 120, health * 2, 30, 20); // Rounded corners
+
+    // Draw the bar outline
+    noFill();
+    stroke(0);
+    strokeWeight(2);
+    rect(width / 2 - 100, height - 120, 200, 30, 20); // Full width outline
 
     // Adjust health every 500ms
     if (millis() % updateInterval < 20) {
@@ -210,4 +218,12 @@ function adjustHealth() {
     } else {
         health = max(0, health - 0.1); // Decrease health
     }
+}
+
+// Helper function to create a styled button
+function createCustomButton(label, x, y, onClick) {
+    let button = createButton(label);
+    button.position(x - button.width / 2, y);
+    button.class('custom-button');
+    button.mousePressed(onClick);
 }
