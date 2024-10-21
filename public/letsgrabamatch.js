@@ -140,16 +140,23 @@ function drawMainAppScreen() {
     }
 }
 
-// Helper function to detect touch inside an image's area
+// Helper function to detect if touch/click is within the image boundaries
 function touchInImageBounds(x, y, imgWidth, imgHeight) {
-    if (touchIsDown) {
+    if (touches.length > 0) { // Check if there is at least one active touch
+        let touch = touches[0]; // Use the first touch point
         return (
-            touchX > x && touchX < x + imgWidth &&
-            touchY > y && touchY < y + imgHeight
+            touch.x > x && touch.x < x + imgWidth &&
+            touch.y > y && touch.y < y + imgHeight
+        );
+    } else if (mouseIsPressed) { // Fallback to mouse input
+        return (
+            mouseX > x && mouseX < x + imgWidth &&
+            mouseY > y && mouseY < y + imgHeight
         );
     }
-    return false;
+    return false; // No touch or click detected
 }
+
 
 // Get the appropriate animation based on current health
 function getAnimationForHealth() {
