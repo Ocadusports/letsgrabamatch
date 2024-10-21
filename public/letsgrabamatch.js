@@ -119,9 +119,9 @@ function draw() {
 
 
 // Display acceleration values for debugging
-text(Motion X: ${ motionValue.x }, 10, 80);
-text(Motion Y: ${ motionValue.y }, 10, 110);
-text(Motion Z: ${ motionValue.z }, 10, 140);
+text(`Motion X: ${motionValue.x}`, 10, 80);
+text(`Motion Y: ${motionValue.y}`, 10, 110);
+text(`Motion Z: ${motionValue.z}`, 10, 140);
 
 
 
@@ -166,7 +166,7 @@ function drawCharacterSelectScreen() {
 
         // Check if the touch or click is within the image boundaries
         if (touchInImageBounds(x, y, 100, 100)) {
-            selectedCharacter = char${ i + 1 }; // Select the character
+            selectedCharacter = `char${i + 1}`; // Select the character
             screen = 3; // Move to the main app screen
         }
     }
@@ -205,7 +205,7 @@ function touchInImageBounds(x, y, imgWidth, imgHeight) {
 function getAnimationForHealth() {
     if (health <= 0) {
         return animations[selectedCharacter].sleep;
-    } else if (health <= 10) {
+    } else if (health <= 20) {
         return animations[selectedCharacter].normal;
     } else if (health <= 80) {
         return animations[selectedCharacter].powerup;
@@ -213,3 +213,4 @@ function getAnimationForHealth() {
         return animations[selectedCharacter].onFire;
     }
 }
+
