@@ -7,6 +7,8 @@ let animations = {}; // Store animations for each character
 let titleImg;
 // let nextButton = null; // Store the reference to the Next button
 
+let nextButtonDiv, energyBarDiv; // Div elements for buttons and UI components
+
 // Health management variables
 let health = 20; // Start health at 20%
 let motionValue = { x: 0, y: 0, z: 0 }; // Track motion values
@@ -50,17 +52,54 @@ function preload() {
 // Setup the canvas and initialize elements
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    noStroke();
-    textSize(16);
-    fill(0);
+    setupWelcomeScreen();
+    setupEnableMotionButton(); // Setup Enable Motion Button for main app screen
+
+
+    // // Create the "Next" button as a div
+    // nextButtonDiv = createDiv('Next');
+    // nextButtonDiv.size(150, 50);
+    // nextButtonDiv.style('background-color', '#FFC107');
+    // nextButtonDiv.style('color', 'black');
+    // nextButtonDiv.style('font-size', '24px');
+    // nextButtonDiv.style('font-family', 'Arial, sans-serif');
+    // nextButtonDiv.style('text-align', 'center');
+    // nextButtonDiv.style('line-height', '50px'); // Center the text vertically
+    // nextButtonDiv.style('border-radius', '25px'); // Rounded corners
+    // nextButtonDiv.style('cursor', 'pointer');
+    // nextButtonDiv.style('box-shadow', '0px 8px 10px rgba(0, 0, 0, 0.4)');
+
+    // nextButtonDiv.mousePressed(() => {
+    //     screen = 2; // Move to the character selection screen
+    // });
 
     // Create the "Enable Motion" button (only used on the Main App screen)
     let button = createButton('Enable Motion');
+
     button.position(windowWidth / 2 - 100, windowHeight / 1.5);
     button.class('custom-button'); // Use custom styling for consistency
     button.mousePressed(requestMotionPermission); // Handle motion permission request
     button.hide(); // Hide initially until needed
     window.motionButton = button; // Store button reference globally
+}
+
+// Helper function to center a div with offset
+function centerDiv(div, yOffset) {
+    div.position((windowWidth - div.width) / 2, yOffset);
+}
+
+// Helper function to style div elements
+function styleDiv(div, width, height) {
+    div.size(width, height);
+    div.style('background-color', '#FFC107');
+    div.style('color', 'black');
+    div.style('font-size', '24px');
+    div.style('font-family', 'Arial, sans-serif');
+    div.style('text-align', 'center');
+    div.style('line-height', `${height}px`);
+    div.style('border-radius', '25px');
+    div.style('cursor', 'pointer');
+    div.style('box-shadow', '0px 8px 10px rgba(0, 0, 0, 0.4)');
 }
 
 // Main draw loop to handle different screens
@@ -82,18 +121,6 @@ function drawWelcomeScreen() {
 
     imageMode(CENTER);
     image(titleImg, windowWidth / 2, windowHeight / 3, 329, 132); // Display title image
-
-    // // Display the "Let's Grab A Match!" message (centered)
-    // textAlign(CENTER, CENTER);
-    // textSize(50);
-    // fill(0);
-    // text("Let's Grab A Match!", width / 2, height / 3);
-
-
-    // Create a custom Next button to move to character selection
-    createCustomButton('Next', width / 2, height / 2 + 100, () => {
-        screen = 2; // Move to the character selection screen
-    });
 }
 
 // --- Character Selection Screen ---
@@ -114,19 +141,18 @@ function drawCharacterSelectScreen() {
         // Check for character selection
         if (touchInImageBounds(x, y, 100, 100)) {
             selectedCharacter = `char${i + 1}`; // Store selected character
-
-
         }
     }
-    // Create a custom Next button to move to the main app screen
-    createCustomButton('Next', width / 2, height - 100, () => {
-        if (selectedCharacter) {
-            screen = 3; // Move to the main app screen
-        } else {
-            alert('Please select a character!');
-        }
+    // Next button for main app screen
+    nextButtonDiv = createDiv('Next');
+    styleDiv(nextButtonDiv, 150, 50);
+    nextButtonDiv.mousePressed(() => {
+        if (selectedCharacter) screen = 3;
+        else alert('Please select a character!');
     });
+    centerDiv(nextButtonDiv, height - 100);
 }
+
 
 // --- Main App Screen ---
 function drawMainAppScreen() {
@@ -135,26 +161,24 @@ function drawMainAppScreen() {
     // Display the appropriate character animation based on health
     let animation = getAnimationForHealth();
     image(animation, width / 2 - 75, height / 3, 150, 150);
+    drawEnergyBar();
 
-    // Draw the energy bar at the bottom
-    textAlign(LEFT);
-    textSize(24);
-    text('ENERGY BAR:', width / 2 - 100, height - 150);
+    // // Adjust health every 500ms
+    // if (millis() % updateInterval < 20) {
+    //     adjustHealth();
+    // }
+}
 
-    // Draw the filled portion of the energy bar based on health
-    fill('#FFC107');
-    rect(width / 2 - 100, height - 120, health * 2, 30, 20); // Rounded corners
-
-    // Draw the bar outline
-    noFill();
-    stroke(0);
-    strokeWeight(2);
-    rect(width / 2 - 100, height - 120, 200, 30, 20); // Full width outline
-
-    // Adjust health every 500ms
-    if (millis() % updateInterval < 20) {
-        adjustHealth();
+// Draw Energy Bar
+function drawEnergyBar() {
+    if (!energyBarDiv) {
+        energyBarDiv = createDiv('');
+        energyBarDiv.size(200, 30);
+        energyBarDiv.style('background-color', '#FFC107');
+        centerDiv(energyBarDiv, height - 120);
     }
+    let healthWidth = map(health, 0, 100, 0, 200);
+    energyBarDiv.size(healthWidth, 30); // Adjust width based on health
 }
 
 // Helper function to detect if touch/click is within the image boundaries
@@ -177,24 +201,6 @@ function touchInImageBounds(x, y, imgWidth, imgHeight) {
     }
     return false; // No touch or click detected
 }
-
-function touchStarted() {
-    if (screen === 2) { // Character Selection Screen
-        // Check which character is selected
-        for (let i = 0; i < characters.length; i++) {
-            let x = width / 2 - 50;
-            let y = 150 + i * 150;
-
-            if (touchInImageBounds(x, y, 100, 100)) {
-                selectedCharacter = `char${i + 1}`; // Store selected character
-                console.log(`Character ${i + 1} selected!`);
-            }
-        }
-    }
-}
-
-
-
 
 // Get the appropriate animation based on current health
 function getAnimationForHealth() {
@@ -250,13 +256,13 @@ function adjustHealth() {
     }
 }
 
-// Helper function to create a styled button
-function createCustomButton(label, x, y, onClick) {
-    let button = createButton(label); // Create the button
-    button.position(x - button.width / 2, y); // Position it
-    button.class('custom-button'); // Apply the custom CSS class
-    button.mousePressed(onClick); // Attach click event
-}
+// // Helper function to create a styled button
+// function createCustomButton(label, x, y, onClick) {
+//     let button = createButton(label); // Create the button
+//     button.position(x - button.width / 2, y); // Position it
+//     button.class('custom-button'); // Apply the custom CSS class
+//     button.mousePressed(onClick); // Attach click event
+// }
 
 // Hide the address bar on iOS devices
 window.addEventListener('load', () => {
