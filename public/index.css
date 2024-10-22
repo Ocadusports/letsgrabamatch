@@ -17,9 +17,14 @@ body {
     flex-direction: column;
     /* Stack image and button vertically */
     align-items: center;
+    justify-content: center;
     /* Center items horizontally */
     gap: 20px;
     /* Space between image and button */
+    width: 100%;
+    max-width: 500px;
+    /* Prevents it from getting too wide */
+    text-align: center;
 }
 
 /* Styling the image */
@@ -31,12 +36,22 @@ body {
     /* Optional margin to separate image and button */
 }
 
-/* 
+
 canvas {
+
     display: block;
+    max-width: 100%;
+    /* Ensures canvas is responsive */
+    height: auto;
+    /* Maintain aspect ratio */
+    margin: 0 auto;
+    /* Center the canvas horizontally */
     touch-action: none;
-    /* Ensure touch events aren't blocked 
-} */
+
+
+}
+
+/* Ensure touch events aren't blocked 
 
 /* General button styling */
 .custom-button {
