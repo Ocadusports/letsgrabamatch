@@ -150,13 +150,17 @@ function drawMainAppScreen() {
 
 // Helper function to detect if touch/click is within the image boundaries
 function touchInImageBounds(x, y, imgWidth, imgHeight) {
-    if (touches.length > 0) { // Check if there is at least one active touch
+    // Check if there is an active touch
+    if (touches.length > 0) {
         let touch = touches[0]; // Use the first touch point
+        let tx = touch.pageX; // Use pageX for accurate coordinates
+        let ty = touch.pageY; // Use pageY for accurate coordinates
+
         return (
-            touch.x > x && touch.x < x + imgWidth &&
-            touch.y > y && touch.y < y + imgHeight
+            tx > x && tx < x + imgWidth &&
+            ty > y && ty < y + imgHeight
         );
-    } else if (mouseIsPressed) { // Fallback to mouse input
+    } else if (mouseIsPressed) { // Fallback for mouse input
         return (
             mouseX > x && mouseX < x + imgWidth &&
             mouseY > y && mouseY < y + imgHeight
@@ -164,6 +168,23 @@ function touchInImageBounds(x, y, imgWidth, imgHeight) {
     }
     return false; // No touch or click detected
 }
+
+function touchStarted() {
+    if (screen === 2) { // Character Selection Screen
+        // Check which character is selected
+        for (let i = 0; i < characters.length; i++) {
+            let x = width / 2 - 50;
+            let y = 150 + i * 150;
+
+            if (touchInImageBounds(x, y, 100, 100)) {
+                selectedCharacter = `char${i + 1}`; // Store selected character
+                console.log(`Character ${i + 1} selected!`);
+            }
+        }
+    }
+}
+
+
 
 
 // Get the appropriate animation based on current health
