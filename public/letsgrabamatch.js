@@ -2,7 +2,6 @@
 let screen = 1; // Current screen (1: Welcome, 2: Character Selection, 3: Main App)
 let selectedCharacter = null;
 let characters = [];
-let characterButtons = []; // Store image buttons for characters
 let animations = {};
 let titleImg;
 let nextButtonDiv, energyBarDiv;
@@ -90,31 +89,31 @@ function drawWelcomeScreen() {
 
 // Draw Character Selection Screen
 function drawCharacterSelectScreen() {
-    if (nextButtonDiv) nextButtonDiv.hide(); // Hide previous Next button
+    // Hide the Next button from the Welcome Screen
+    if (nextButtonDiv) nextButtonDiv.hide();
 
     textAlign(CENTER, CENTER);
     textSize(32);
     text('CHOOSE A CHARACTER', width / 2, 50);
 
-    // Create buttons for each character if not already created
-    if (characterButtons.length === 0) {
-        for (let i = 0; i < characters.length; i++) {
-            let x = width / 2 - 80; // Adjust for centering
-            let y = 200 + i * 150;
+    for (let i = 0; i < characters.length; i++) {
+        let img = characters[i];
+        let x = width / 2;
+        let y = 200 + i * 150;
+        image(img, x, y, 160, 182);
 
-            // Use createImg with both arguments: path and alt text
-            let button = createImg(`assets/${["Hippo", "Weasel", "Porcupine"][i]}.png`, `${["Hippo", "Weasel", "Porcupine"][i]}`);
-            button.size(160, 182); // Set the size of the image button
-            button.position(x, y); // Position the image on the screen
-            button.mousePressed(() => {
-                selectedCharacter = `char${i + 1}`; // Store the selected character
-                screen = 3; // Move to the main app screen
-            });
-
-            // Store the button for future use
-            characterButtons.push(button);
+        if (touchInImageBounds(x, y, 100, 100)) {
+            selectedCharacter = `char${i + 1}`;
         }
     }
+
+    nextButtonDiv = createDiv('Next');
+    styleDiv(nextButtonDiv, 150, 50);
+    nextButtonDiv.mousePressed(() => {
+        if (selectedCharacter) screen = 3;
+        else alert('Please select a character!');
+    });
+    centerDiv(nextButtonDiv, height - 100);
 }
 
 
