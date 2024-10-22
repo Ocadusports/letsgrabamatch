@@ -31,11 +31,12 @@ body {
     /* Optional margin to separate image and button */
 }
 
+/* 
 canvas {
     display: block;
     touch-action: none;
-    /* Ensure touch events aren't blocked */
-}
+    /* Ensure touch events aren't blocked 
+} */
 
 /* General button styling */
 .custom-button {

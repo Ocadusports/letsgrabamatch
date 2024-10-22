@@ -3,7 +3,7 @@ let screen = 1; // Track the current screen (1: Welcome, 2: Character Selection,
 let selectedCharacter = null; // Store the selected character
 let characters = []; // Array to hold character images
 let animations = {}; // Store animations for each character
-let titleImg;
+// let titleImg;
 // let nextButton = null; // Store the reference to the Next button
 
 // Health management variables
@@ -15,7 +15,7 @@ let updateInterval = 500; // Health updates every 500ms
 
 // Preload character images and animations
 function preload() {
-    titleImg = loadImage('LGAM 1.png');
+    // titleImg = loadImage('LGAM 1.png');
 
     characters = [
         loadImage('Hippo.png'),
@@ -54,12 +54,20 @@ function setup() {
     fill(0);
 
     // Create the "Enable Motion" button (only used on the Main App screen)
-    let button = createButton('Enable Motion');
-    button.position(windowWidth / 2 - 100, windowHeight / 1.5);
-    button.class('custom-button'); // Use custom styling for consistency
-    button.mousePressed(requestMotionPermission); // Handle motion permission request
-    button.hide(); // Hide initially until needed
-    window.motionButton = button; // Store button reference globally
+    // let button = createButton('Enable Motion');
+    // button.position(windowWidth / 2 - 100, windowHeight / 1.5);
+    // button.class('custom-button'); // Use custom styling for consistency
+    // button.mousePressed(requestMotionPermission); // Handle motion permission request
+    // button.hide(); // Hide initially until needed
+    // window.motionButton = button; // Store button reference globally
+
+    // Handle the Next button functionality
+    const nextButton = select('#nextButton');
+    nextButton.mousePressed(() => {
+        screen = 2; // Move to Character Selection Screen
+        nextButton.hide(); // Hide the button after clicking
+    });
+
 }
 
 // Main draw loop to handle different screens
