@@ -15,7 +15,7 @@ let updateInterval = 500; // Health updates every 500ms
 
 // Preload character images and animations
 function preload() {
-    titleImg = loadImage('LGAM1.png');
+    titleImg = loadImage('LGAM 1.png');
 
     characters = [
         loadImage('Hippo.png'),
