@@ -23,9 +23,9 @@ function preload() {
         { img: 'Porcupine.png', name: 'char3' },
     ];
     animations = {
-        char1: { sleep: loadImage('char1_sleep.png'), normal: loadImage('Hippo.png'), powerup: loadImage('char1_powerup.png'), onFire: loadImage('char1_fire.png') },
-        char2: { sleep: loadImage('char1_sleep.png'), normal: loadImage('Weasel.png'), powerup: loadImage('char1_powerup.png'), onFire: loadImage('char1_fire.png') },
-        char3: { sleep: loadImage('char1_sleep.png'), normal: loadImage('Porcupine.png'), powerup: loadImage('char1_powerup.png'), onFire: loadImage('char1_fire.png') },
+        char1: { sleep: loadImage('char1_sleep.png'), normal: loadImage('Hippo.png'), onFire: loadImage('char1_fire.png') },
+        char2: { sleep: loadImage('char2_sleep.png'), normal: loadImage('Weasel.png'), onFire: loadImage('char2_fire.png') },
+        char3: { sleep: loadImage('char3_sleep.png'), normal: loadImage('Porcupine.png'), onFire: loadImage('char3_fire.png') },
     };
 }
 
@@ -121,11 +121,23 @@ function drawCharacterSelectScreen() {
 
 // Draw Main App Screen
 function drawMainAppScreen() {
+    // Hide all character buttons from the previous screen
+    hideCharacterButtons();
+
+    // Show the motion button and display the animation for the selected character
     window.motionButton.show();
     let animation = getAnimationForHealth();
     image(animation, width / 2 - 75, height / 3, 150, 150);
     drawEnergyBar();
 }
+
+// Helper function to hide character buttons
+function hideCharacterButtons() {
+    for (let button of characterButtons) {
+        button.hide(); // Hide each button
+    }
+}
+
 
 // Draw Energy Bar
 function drawEnergyBar() {
@@ -175,8 +187,7 @@ function adjustHealth() {
 
 // Get Appropriate Animation for Health
 function getAnimationForHealth() {
-    if (health <= 0) return animations[selectedCharacter].sleep;
-    if (health <= 10) return animations[selectedCharacter].normal;
-    if (health <= 80) return animations[selectedCharacter].powerup;
+    if (health <= 20) return animations[selectedCharacter].sleep;
+    if (health <= 70) return animations[selectedCharacter].normal;
     return animations[selectedCharacter].onFire;
 }
