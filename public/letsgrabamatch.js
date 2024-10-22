@@ -48,7 +48,7 @@ function preload() {
 
 // Setup the canvas and initialize elements
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(windowWidth, windowHeight).parent('welcome-container');
     noStroke();
     textSize(16);
     fill(0);
@@ -77,22 +77,23 @@ function draw() {
 
 // --- Welcome Screen ---
 function drawWelcomeScreen() {
-    background('#87CEFA'); // Light blue background
+    console.log('Welcome Screen');
+    // background('#87CEFA'); // Light blue background
 
-    imageMode(CENTER);
-    image(titleImg, windowWidth / 2, windowHeight / 3, 329, 132); // Display title image
+    // imageMode(CENTER);
+    // image(titleImg, windowWidth / 2, windowHeight / 3, 329, 132); // Display title image
 
-    // // Display the "Let's Grab A Match!" message (centered)
-    // textAlign(CENTER, CENTER);
-    // textSize(50);
-    // fill(0);
-    // text("Let's Grab A Match!", width / 2, height / 3);
+    // // // Display the "Let's Grab A Match!" message (centered)
+    // // textAlign(CENTER, CENTER);
+    // // textSize(50);
+    // // fill(0);
+    // // text("Let's Grab A Match!", width / 2, height / 3);
 
 
-    // Create a custom Next button to move to character selection
-    createCustomButton('Next', width / 2, height / 2 + 100, () => {
-        screen = 2; // Move to the character selection screen
-    });
+    // // Create a custom Next button to move to character selection
+    // createCustomButton('Next', width / 2, height / 2 + 100, () => {
+    //     screen = 2; // Move to the character selection screen
+    // });
 }
 
 // --- Character Selection Screen ---
