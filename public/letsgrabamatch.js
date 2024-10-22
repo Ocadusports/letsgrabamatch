@@ -251,8 +251,8 @@ function drawDebugInfo() {
 
 // Adjust Health Based on Motion
 function adjustHealth() {
-    if (isStationary && millis() - lastStationaryTime >= 20000) {
-        health = min(100, health + 0.05); // Increase health slowly
+    if (isStationary && millis() - lastStationaryTime >= 10000) {
+        health = min(100, health + 0.01); // Increase health slowly
     } else {
         health = max(0, health - 0.1); // Decrease health quickly when moving
     }
