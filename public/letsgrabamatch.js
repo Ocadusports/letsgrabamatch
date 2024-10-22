@@ -48,19 +48,18 @@ function preload() {
 
 // Setup the canvas and initialize elements
 function setup() {
-    createCanvas(windowWidth, windowHeight).parent('container'); // Attach canvas to container
+    createCanvas(windowWidth, windowHeight);
+    noStroke();
+    textSize(16);
+    fill(0);
 
-    // Get the Next button and add click functionality
-    const nextButton = select('#nextButton'); // Use p5.js to select the button
-    nextButton.mousePressed(() => {
-        screen = 2; // Move to Character Selection Screen
-        nextButton.hide(); // Hide the button after clicking
-    });
-
-    // Initially, show the button only on the welcome screen
-    if (screen !== 1) {
-        nextButton.hide(); // Hide button if not on the welcome screen
-    }
+    // Create the "Enable Motion" button (only used on the Main App screen)
+    let button = createButton('Enable Motion');
+    button.position(windowWidth / 2 - 100, windowHeight / 1.5);
+    button.class('custom-button'); // Use custom styling for consistency
+    button.mousePressed(requestMotionPermission); // Handle motion permission request
+    button.hide(); // Hide initially until needed
+    window.motionButton = button; // Store button reference globally
 }
 
 // Main draw loop to handle different screens
@@ -91,9 +90,9 @@ function drawWelcomeScreen() {
 
 
     // Create a custom Next button to move to character selection
-    // createCustomButton('Next', width / 3, height / 2 + 100, () => {
-    //     screen = 2; // Move to the character selection screen
-    // });
+    createCustomButton('Next', width / 2, height / 2 + 100, () => {
+        screen = 2; // Move to the character selection screen
+    });
 }
 
 // --- Character Selection Screen ---
@@ -117,13 +116,13 @@ function drawCharacterSelectScreen() {
         }
     }
     // Create a custom Next button to move to the main app screen
-    // createCustomButton('Next', width / 2, height - 100, () => {
-    //     if (selectedCharacter) {
-    //         screen = 3; // Move to the main app screen
-    //     } else {
-    //         alert('Please select a character!');
-    //     }
-    // });
+    createCustomButton('Next', width / 2, height - 100, () => {
+        if (selectedCharacter) {
+            screen = 3; // Move to the main app screen
+        } else {
+            alert('Please select a character!');
+        }
+    });
 }
 
 // --- Main App Screen ---
