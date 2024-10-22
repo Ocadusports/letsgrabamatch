@@ -14,6 +14,8 @@ let updateInterval = 500; // Health updates every 500ms
 
 // Preload character images and animations
 function preload() {
+    titleImg = loadImage('LGAM1.png');
+
     characters = [
         loadImage('Hippo.png'),
         loadImage('Weasel.png'),
@@ -76,11 +78,14 @@ function draw() {
 function drawWelcomeScreen() {
     background('#87CEFA'); // Light blue background
 
-    // Display the "Let's Grab A Match!" message (centered)
-    textAlign(CENTER, CENTER);
-    textSize(50);
-    fill(0);
-    text("Let's Grab A Match!", width / 2, height / 3);
+    imageMode(CENTER);
+    image(titleImg, 32, 294, 329, 132); // Display title image
+
+    // // Display the "Let's Grab A Match!" message (centered)
+    // textAlign(CENTER, CENTER);
+    // textSize(50);
+    // fill(0);
+    // text("Let's Grab A Match!", width / 2, height / 3);
 
 
     // Create a custom Next button to move to character selection
