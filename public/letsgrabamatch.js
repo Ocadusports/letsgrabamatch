@@ -2,7 +2,6 @@
 let screen = 1; // Current screen (1: Welcome, 2: Character Selection, 3: Main App)
 let selectedCharacter = null;
 let characters = [];
-let characterButtons = []; // Store image buttons for characters
 let animations = {};
 let titleImg;
 let nextButtonDiv, energyBarDiv;
@@ -32,15 +31,15 @@ function preload() {
 // Setup the canvas and initialize screens
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    setupWelcomeScreen();
-    setupEnableMotionButton();
+    setupWelcomeScreen(); // Call the welcome screen setup
+    setupEnableMotionButton(); // Setup motion button for main app screen
 }
 
-// Setup the Welcome Screen
+// Setup the Welcome Screen 
 function setupWelcomeScreen() {
     nextButtonDiv = createDiv('Next');
     styleDiv(nextButtonDiv, 150, 50);
-    nextButtonDiv.mousePressed(() => screen = 2);
+    nextButtonDiv.mousePressed(() => screen = 2); // Move to character selection
     centerDiv(nextButtonDiv, windowHeight / 2 + 100);
 }
 
@@ -52,6 +51,25 @@ function setupEnableMotionButton() {
     centerDiv(motionButton, windowHeight / 1.5);
     motionButton.hide();
     window.motionButton = motionButton;
+}
+
+// Style Div Helper Function
+function styleDiv(div, width, height) {
+    div.size(width, height);
+    div.style('background-color', '#FFC107');
+    div.style('color', 'black');
+    div.style('font-size', '24px');
+    div.style('font-family', 'Arial, sans-serif');
+    div.style('text-align', 'center');
+    div.style('line-height', `${height}px`);
+    div.style('border-radius', '25px');
+    div.style('cursor', 'pointer');
+    div.style('box-shadow', '0px 10px rgba(0, 0, 0, 1)');
+}
+
+// Center Div Helper Function
+function centerDiv(div, yOffset) {
+    div.position((windowWidth - div.width) / 2, yOffset);
 }
 
 // Main Draw Loop to Manage Screens
@@ -97,6 +115,7 @@ function drawCharacterSelectScreen() {
     }
 }
 
+
 // Draw Main App Screen
 function drawMainAppScreen() {
     window.motionButton.show();
@@ -115,6 +134,19 @@ function drawEnergyBar() {
     }
     let healthWidth = map(health, 0, 100, 0, 200);
     energyBarDiv.size(healthWidth, 30);
+}
+
+// Detect Touches within Image Boundaries
+function touchInImageBounds(x, y, imgWidth, imgHeight) {
+    if (touches.length > 0) {
+        let touch = touches[0];
+        return touch.pageX > x && touch.pageX < x + imgWidth &&
+            touch.pageY > y && touch.pageY < y + imgHeight;
+    } else if (mouseIsPressed) {
+        return mouseX > x && mouseX < x + imgWidth &&
+            mouseY > y && mouseY < y + imgHeight;
+    }
+    return false;
 }
 
 // Request Motion Permission (iOS)
