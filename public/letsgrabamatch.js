@@ -37,7 +37,7 @@ function setup() {
 
 // Setup the Welcome Screen 
 function setupWelcomeScreen() {
-    nextButtonDiv = createDiv('Next');
+    nextButtonDiv = createDiv('NEXT');
     styleDiv(nextButtonDiv, 150, 50);
     nextButtonDiv.mousePressed(() => screen = 2); // Move to character selection
     centerDiv(nextButtonDiv, windowHeight / 2 + 100);
@@ -64,7 +64,7 @@ function styleDiv(div, width, height) {
     div.style('line-height', `${height}px`);
     div.style('border-radius', '25px');
     div.style('cursor', 'pointer');
-    div.style('box-shadow', '0px 10px rgba(0, 0, 0, 1)');
+    div.style('box-shadow', '0px 7px rgba(0, 0, 0, 1)');
 }
 
 // Center Div Helper Function
@@ -97,23 +97,24 @@ function drawCharacterSelectScreen() {
     text('CHOOSE A CHARACTER', width / 2, 50);
 
     for (let i = 0; i < characters.length; i++) {
+        var button;
         let img = characters[i];
         let x = width / 2;
         let y = 200 + i * 150;
-        image(img, x, y, 160, 182);
+        button = createImg(img, x, y, 160, 182);
 
-        if (touchInImageBounds(x, y, 100, 100)) {
-            selectedCharacter = `char${i + 1}`;
-        }
+        // if (touchInImageBounds(x, y, 100, 100)) {
+        //     selectedCharacter = `char${i + 1}`;
+        // }
     }
 
-    nextButtonDiv = createDiv('Next');
-    styleDiv(nextButtonDiv, 150, 50);
-    nextButtonDiv.mousePressed(() => {
-        if (selectedCharacter) screen = 3;
-        else alert('Please select a character!');
-    });
-    centerDiv(nextButtonDiv, height - 100);
+    // nextButtonDiv = createDiv('Next');
+    // styleDiv(nextButtonDiv, 150, 50);
+    // nextButtonDiv.mousePressed(() => {
+    //     if (selectedCharacter) screen = 3;
+    //     else alert('Please select a character!');
+    // });
+    // centerDiv(nextButtonDiv, height - 100);
 }
 
 
