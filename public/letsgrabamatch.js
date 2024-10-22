@@ -100,7 +100,7 @@ function drawCharacterSelectScreen() {
     if (characterButtons.length === 0) {
         for (let i = 0; i < characters.length; i++) {
             let x = width / 2 - 80; // Adjust for centering
-            let y = 150 + i * 200; // Space between each character
+            let y = 200 + i * 150; // Space between each character
 
             // Create the image button
             let button = createImg(characters[i].img, characters[i].name);
