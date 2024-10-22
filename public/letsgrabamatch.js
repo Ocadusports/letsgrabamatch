@@ -90,7 +90,7 @@ function drawWelcomeScreen() {
 
 // Draw Character Selection Screen
 function drawCharacterSelectScreen() {
-    if (nextButtonDiv) nextButtonDiv.hide();
+    if (nextButtonDiv) nextButtonDiv.hide(); // Hide previous Next button
 
     textAlign(CENTER, CENTER);
     textSize(32);
@@ -102,15 +102,16 @@ function drawCharacterSelectScreen() {
             let x = width / 2 - 80; // Adjust for centering
             let y = 200 + i * 150;
 
-            let button = createImg(`assets/${["Hippo", "Weasel", "Porcupine"][i]}.png`);
-            button.size(160, 182);
-            button.position(x, y);
+            // Use createImg with both arguments: path and alt text
+            let button = createImg(`assets/${["Hippo", "Weasel", "Porcupine"][i]}.png`, `${["Hippo", "Weasel", "Porcupine"][i]}`);
+            button.size(160, 182); // Set the size of the image button
+            button.position(x, y); // Position the image on the screen
             button.mousePressed(() => {
                 selectedCharacter = `char${i + 1}`; // Store the selected character
                 screen = 3; // Move to the main app screen
             });
 
-            // Store button for potential future use (like hiding or updating)
+            // Store the button for future use
             characterButtons.push(button);
         }
     }
