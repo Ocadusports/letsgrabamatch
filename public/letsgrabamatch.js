@@ -23,9 +23,9 @@ function preload() {
         { img: 'Porcupine.png', name: 'char3' },
     ];
     animations = {
-        char1: { sleep: loadImage('char1_sleep.png'), normal: loadImage('Hippo.png'), onFire: loadImage('char1_fire.png') },
-        char2: { sleep: loadImage('char2_sleep.png'), normal: loadImage('Weasel.png'), onFire: loadImage('char2_fire.png') },
-        char3: { sleep: loadImage('char3_sleep.png'), normal: loadImage('Porcupine.png'), onFire: loadImage('char3_fire.png') },
+        char1: { sleep: loadImage('char1_sleep.png'), normal: loadImage('Hippo.png'), powerUp: loadImage('char1_up.png'), onFire: loadImage('char1_fire.png') },
+        char2: { sleep: loadImage('char2_sleep.png'), normal: loadImage('Weasel.png'), powerUp: loadImage('char2_up.png'), onFire: loadImage('char2_fire.png') },
+        char3: { sleep: loadImage('char3_sleep.png'), normal: loadImage('Porcupine.png'), powerUp: loadImage('char3_up.png') onFire: loadImage('char3_fire.png') },
     };
 }
 
@@ -241,6 +241,7 @@ function adjustHealth() {
 // Get Appropriate Animation for Health
 function getAnimationForHealth() {
     if (health <= 20) return animations[selectedCharacter].sleep;
-    if (health <= 70) return animations[selectedCharacter].normal;
+    if (health <= 50) return animations[selectedCharacter].normal;
+    if (health <= 70) return animations[selectedCharacter].powerUp;
     return animations[selectedCharacter].onFire;
 }
