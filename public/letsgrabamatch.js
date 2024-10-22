@@ -98,7 +98,7 @@ function drawCharacterSelectScreen() {
 
     for (let i = 0; i < characters.length; i++) {
         let img = characters[i];
-        let x = width / 2 - 50;
+        let x = width / 2;
         let y = 150 + i * 150;
         image(img, x, y, 160, 182);
 
