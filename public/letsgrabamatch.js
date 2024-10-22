@@ -100,7 +100,7 @@ function drawCharacterSelectScreen() {
         let img = characters[i];
         let x = width / 2 - 50;
         let y = 150 + i * 150;
-        image(img, x, y, 100, 100);
+        image(img, x, y, 160, 182);
 
         if (touchInImageBounds(x, y, 100, 100)) {
             selectedCharacter = `char${i + 1}`;
