@@ -6,6 +6,9 @@ let animations = {};
 let titleImg;
 let nextButtonDiv, energyBarDiv;
 
+// Variables to store selection state
+let selectedCharacterIndex = null; // Index of the selected character
+
 // Health management variables
 let health = 20;
 let motionValue = { x: 0, y: 0, z: 0 };
@@ -100,20 +103,46 @@ function drawCharacterSelectScreen() {
         let img = characters[i];
         let x = width / 2 - 50;
         let y = 150 + i * 150;
+
+        // Apply stroke if the character is selected
+        if (selectedCharacterIndex === i) {
+            stroke(0, 255, 0); // Green stroke for selected character
+            strokeWeight(4);
+        } else {
+            noStroke(); // No stroke for unselected characters
+        }
+
+        // Display the character image
         image(img, x, y, 100, 100);
 
-        if (touchInImageBounds(x, y, 100, 100)) {
-            selectedCharacter = `char${i + 1}`;
+        // Handle click interactions
+        if (mouseIsPressed && mouseInBounds(x, y, 100, 100)) {
+            if (selectedCharacterIndex === i) {
+                // Deselect if the same character is clicked again
+                selectedCharacterIndex = null;
+                selectedCharacter = null;
+            } else {
+                // Select the character and store its index
+                selectedCharacterIndex = i;
+                selectedCharacter = `char${i + 1}`;
+            }
         }
     }
 
+    // Create the Next button
     nextButtonDiv = createDiv('Next');
     styleDiv(nextButtonDiv, 150, 50);
     nextButtonDiv.mousePressed(() => {
-        if (selectedCharacter) screen = 3;
+        if (selectedCharacter) screen = 3; // Proceed if a character is selected
         else alert('Please select a character!');
     });
     centerDiv(nextButtonDiv, height - 100);
+}
+
+// Helper function to check if the mouse is within image bounds
+function mouseInBounds(x, y, imgWidth, imgHeight) {
+    return mouseX > x && mouseX < x + imgWidth &&
+        mouseY > y && mouseY < y + imgHeight;
 }
 
 
