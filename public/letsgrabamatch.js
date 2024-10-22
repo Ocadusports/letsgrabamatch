@@ -142,10 +142,10 @@ function draw() {
     else if (screen === 2) drawCharacterSelectScreen();
     else if (screen === 3) drawMainAppScreen();
 
-    // Display acceleration values for debugging
-    text(`Motion X: ${motionValue.x}`, 10, 80);
-    text(`Motion Y: ${motionValue.y}`, 10, 110);
-    text(`Motion Z: ${motionValue.z}`, 10, 140);
+    // // Display acceleration values for debugging
+    // text(`Motion X: ${motionValue.x}`, 10, 80);
+    // text(`Motion Y: ${motionValue.y}`, 10, 110);
+    // text(`Motion Z: ${motionValue.z}`, 10, 140);
 }
 
 // Draw Welcome Screen
@@ -207,7 +207,7 @@ function drawMainAppScreen() {
     positionMotionButton();
 
     // Display debug information with motion values
-    drawDebugInfo();
+    // drawDebugInfo();
 
     // Adjust health based on motion
     adjustHealth();
@@ -255,16 +255,16 @@ function drawEnergyBar() {
     text(`Energy: ${floor(health)}%`, width / 2, y + barHeight + 20);
 }
 
-// Draw Debug Info with Motion Values
-function drawDebugInfo() {
-    fill(0);
-    noStroke();
-    textSize(16);
-    textAlign(LEFT);
-    text(`X: ${motionValue.x.toFixed(2)}`, 10, height - 70);
-    text(`Y: ${motionValue.y.toFixed(2)}`, 10, height - 50);
-    text(`Z: ${motionValue.z.toFixed(2)}`, 10, height - 30);
-}
+// // Draw Debug Info with Motion Values
+// function drawDebugInfo() {
+//     fill(0);
+//     noStroke();
+//     textSize(16);
+//     textAlign(LEFT);
+//     text(`X: ${motionValue.x.toFixed(2)}`, 10, height - 70);
+//     text(`Y: ${motionValue.y.toFixed(2)}`, 10, height - 50);
+//     text(`Z: ${motionValue.z.toFixed(2)}`, 10, height - 30);
+// }
 
 
 // Adjust Health Based on Motion
