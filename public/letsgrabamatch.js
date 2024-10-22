@@ -47,7 +47,7 @@ function setupWelcomeScreen() {
 // Setup Enable Motion Button
 function setupEnableMotionButton() {
     let motionButton = createDiv('Enable Motion');
-    styleDiv(motionButton, 150, 50);
+    styleDiv(motionButton, 300, 50);
     motionButton.mousePressed(requestMotionPermission);
     centerDiv(motionButton, windowHeight / 1.5);
     motionButton.hide();
@@ -130,7 +130,7 @@ function drawMainAppScreen() {
     text('GO AND PLAY NOW!', width / 2, 50);
 
     let animation = getAnimationForHealth();
-    image(animation, width / 2 - 75, height / 3, 270, 309);
+    image(animation, width / 2, height / 3, 270, 309);
 
     drawEnergyBar();
     adjustHealth();
