@@ -90,7 +90,7 @@ function drawWelcomeScreen() {
 
 
     // Create a custom Next button to move to character selection
-    createCustomButton('Next', width / 2, height / 2 + 100, () => {
+    createCustomButton('Next', width / 3, height / 2 + 100, () => {
         screen = 2; // Move to the character selection screen
     });
 }
