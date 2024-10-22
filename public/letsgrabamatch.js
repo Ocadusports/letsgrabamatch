@@ -162,7 +162,7 @@ function drawCharacterSelectScreen() {
     textAlign(CENTER, CENTER);
     textSize(32);
     textStyle(BOLD);
-    text('CHOOSE A CHARACTER', width / 2, 50);
+    text('CHOOSE YOUR PET', width / 2, 50);
 
     // Create buttons for each character if not already created
     if (characterButtons.length === 0) {
