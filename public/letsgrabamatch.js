@@ -99,7 +99,7 @@ function drawCharacterSelectScreen() {
     for (let i = 0; i < characters.length; i++) {
         let img = characters[i];
         let x = width / 2;
-        let y = 150 + i * 150;
+        let y = 200 + i * 150;
         image(img, x, y, 160, 182);
 
         if (touchInImageBounds(x, y, 100, 100)) {
