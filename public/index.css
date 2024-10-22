@@ -42,9 +42,19 @@ canvas {
     transition: transform 0.1s ease;
     /* Smooth click animation */
     display: inline-block;
+    width: 80%;
+    /* Button takes 80% of the screen width */
+    max-width: 300px;
+    /* Prevents it from being too large */
 }
 
 .custom-button:active {
     transform: scale(0.95);
     /* Button shrinks slightly on click */
+}
+
+html,
+body {
+    touch-action: manipulation;
+    /* Prevents double-tap zoom */
 }
