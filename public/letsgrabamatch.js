@@ -121,34 +121,53 @@ function drawCharacterSelectScreen() {
 
 // Draw Main App Screen
 function drawMainAppScreen() {
-    // Hide all character buttons from the previous screen
     hideCharacterButtons();
-
-    // Show the motion button and display the animation for the selected character
     window.motionButton.show();
+
+    fill(0);
+    textSize(32);
+    textAlign(CENTER);
+    text('GO AND PLAY NOW!', width / 2, 50);
+
     let animation = getAnimationForHealth();
-    image(animation, width / 2 - 75, height / 3, 150, 150);
+    image(animation, width / 2 - 75, height / 3, 270, 309);
+
     drawEnergyBar();
+    adjustHealth();
 }
 
 // Helper function to hide character buttons
 function hideCharacterButtons() {
     for (let button of characterButtons) {
-        button.hide(); // Hide each button
+        button.hide();
     }
 }
 
 
-// Draw Energy Bar
+// Draw the Energy Bar with rounded corners
 function drawEnergyBar() {
-    if (!energyBarDiv) {
-        energyBarDiv = createDiv('');
-        energyBarDiv.size(200, 30);
-        energyBarDiv.style('background-color', '#FFC107');
-        centerDiv(energyBarDiv, height - 120);
-    }
-    let healthWidth = map(health, 0, 100, 0, 200);
-    energyBarDiv.size(healthWidth, 30);
+    let barWidth = 300;
+    let barHeight = 30;
+    let x = (width - barWidth) / 2;
+    let y = height - 100;
+
+    // Background of the bar
+    stroke(0);
+    strokeWeight(2);
+    fill(255);
+    rect(x, y, barWidth, barHeight, 15); // Rounded corners
+
+    // Fill the bar based on the health value
+    let fillWidth = map(health, 0, 100, 0, barWidth);
+    noStroke();
+    fill('#FFC107');
+    rect(x, y, fillWidth, barHeight, 15); // Rounded corners
+
+    // Display the energy percentage
+    fill(0);
+    textSize(20);
+    textAlign(CENTER, CENTER);
+    text(`Energy: ${floor(health)}%`, width / 2, y + barHeight + 20);
 }
 
 // Request Motion Permission (iOS)
