@@ -3,6 +3,7 @@ let screen = 1; // Track the current screen (1: Welcome, 2: Character Selection,
 let selectedCharacter = null; // Store the selected character
 let characters = []; // Array to hold character images
 let animations = {}; // Store animations for each character
+let titleImg;
 // let nextButton = null; // Store the reference to the Next button
 
 // Health management variables
@@ -78,14 +79,14 @@ function draw() {
 function drawWelcomeScreen() {
     background('#87CEFA'); // Light blue background
 
-    // imageMode(CENTER);
-    // image(titleImg, 32, 294, 329, 132); // Display title image
+    imageMode(CENTER);
+    image(titleImg, 32, 294, 329, 132); // Display title image
 
-    // Display the "Let's Grab A Match!" message (centered)
-    textAlign(CENTER, CENTER);
-    textSize(50);
-    fill(0);
-    text("Let's Grab A Match!", width / 2, height / 3);
+    // // Display the "Let's Grab A Match!" message (centered)
+    // textAlign(CENTER, CENTER);
+    // textSize(50);
+    // fill(0);
+    // text("Let's Grab A Match!", width / 2, height / 3);
 
 
     // Create a custom Next button to move to character selection
