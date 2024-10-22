@@ -243,8 +243,9 @@ function adjustHealth() {
 
 // Helper function to create a styled button
 function createCustomButton(label, x, y, onClick) {
-    let button = createButton(label);
-    button.position(x - button.width / 2, y);
-    button.class('custom-button');
-    button.mousePressed(onClick);
+    let button = createButton(label); // Create the button
+    button.position(x - button.width / 2, y); // Position it
+    button.class('custom-button'); // Apply the custom CSS class
+    button.mousePressed(onClick); // Attach click event
 }
+
