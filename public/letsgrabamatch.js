@@ -15,9 +15,9 @@ let updateInterval = 500; // Health updates every 500ms
 // Preload character images and animations
 function preload() {
     characters = [
-        loadImage('char1.png'),
-        loadImage('char2.png'),
-        loadImage('char3.png'),
+        loadImage('Hippo.png'),
+        loadImage('Weasel.png'),
+        loadImage('Porcupine.png'),
     ];
 
     // Load animations for each character (different health levels)
