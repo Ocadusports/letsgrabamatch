@@ -95,14 +95,21 @@ function drawCharacterSelectScreen() {
     // Hide the Next button from the Welcome Screen
     if (nextButtonDiv) nextButtonDiv.hide();
 
+    background(255); // Set background to white to avoid leftover artifacts
+
     textAlign(CENTER, CENTER);
     textSize(32);
+    fill(0); // Set text color to black
     text('CHOOSE A CHARACTER', width / 2, 50);
+
+    // Calculate the spacing and alignment for the images
+    let spacing = 150; // Vertical spacing between images
+    let startY = height / 3 - (characters.length * spacing) / 2; // Start position for the first image
 
     for (let i = 0; i < characters.length; i++) {
         let img = characters[i];
-        let x = width / 2 - 50;
-        let y = 150 + i * 150;
+        let x = width / 2 - 50; // Centered horizontally
+        let y = startY + i * spacing; // Vertical position for each image
 
         // Apply stroke if the character is selected
         if (selectedCharacterIndex === i) {
@@ -112,8 +119,10 @@ function drawCharacterSelectScreen() {
             noStroke(); // No stroke for unselected characters
         }
 
-        // Display the character image
-        image(img, x, y, 100, 100);
+        // Draw the character image with a border
+        rectMode(CENTER);
+        rect(x + 50, y + 50, 100, 100); // Draw a rectangle behind the image
+        image(img, x, y, 100, 100); // Display the character image
 
         // Handle click interactions
         if (mouseIsPressed && mouseInBounds(x, y, 100, 100)) {
