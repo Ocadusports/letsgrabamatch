@@ -193,6 +193,7 @@ function drawMainAppScreen() {
 
     fill(0);
     textSize(32);
+    noStroke();
     textAlign(CENTER);
     text('GO AND PLAY NOW!', width / 2, 50);
 
@@ -231,7 +232,7 @@ function drawEnergyBar() {
     let barWidth = 300;
     let barHeight = 30;
     let x = (width - barWidth) / 2;
-    let y = height / 2;
+    let y = height / 1.8;
 
     // Background of the bar
     stroke(0);
@@ -248,6 +249,7 @@ function drawEnergyBar() {
 
     // Display the energy percentage
     fill(0);
+    noStroke();
     textSize(20);
     textAlign(CENTER, CENTER);
     text(`Energy: ${floor(health)}%`, width / 2, y + barHeight + 20);
@@ -256,6 +258,7 @@ function drawEnergyBar() {
 // Draw Debug Info with Motion Values
 function drawDebugInfo() {
     fill(0);
+    noStroke();
     textSize(16);
     textAlign(LEFT);
     text(`X: ${motionValue.x.toFixed(2)}`, 10, height - 70);
