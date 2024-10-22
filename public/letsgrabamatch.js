@@ -8,6 +8,8 @@ let motionValue = { x: 0, y: 0, z: 0 }; // Track motion
 let lastStationaryTime = 0;
 let isStationary = false;
 let updateInterval = 500; // Update every 500ms
+let selectedCharacterIndex = null; // Store selected character index
+
 
 function preload() {
     titleImg = loadImage('LGAM 1.png');
@@ -83,7 +85,7 @@ function drawWelcomeScreen() {
     image(titleImg, width / 2, height / 3, 329, 132);
 }
 
-// Draw Character Selection Screen
+// --- Character Selection Screen ---
 function drawCharacterSelectScreen() {
     background(240);
     textAlign(CENTER, CENTER);
@@ -91,22 +93,30 @@ function drawCharacterSelectScreen() {
     fill(0);
     text('CHOOSE A CHARACTER', width / 2, 50);
 
-    if (characterDivs.length === 0) createCharacterDivs(); // Create only once
+    let imageSize = 150;
+    let spacing = width / 4;
+    let yOffset = height / 3;
 
-    let yOffset = height / 2.5;
-    for (let i = 0; i < characterDivs.length; i++) {
-        centerDiv(characterDivs[i], yOffset);
-        yOffset += 150; // Spacing between characters
+    for (let i = 0; i < characters.length; i++) {
+        let x = spacing * (i + 1) - imageSize / 2;
+
+        if (selectedCharacterIndex === i) {
+            stroke('#FFC107');
+            strokeWeight(5);
+            rectMode(CENTER);
+            rect(x + imageSize / 2, yOffset + imageSize / 2, imageSize + 10, imageSize + 10, 20);
+        }
+
+        noStroke();
+        image(characters[i], x, yOffset, imageSize, imageSize);
     }
 
-    // Add Next button to proceed to Main App Screen
     if (!nextButtonDiv) {
         nextButtonDiv = createDiv('Next');
         styleDiv(nextButtonDiv, 150, 50);
         nextButtonDiv.mousePressed(() => {
             if (selectedCharacter) {
                 screen = 3;
-                hideCharacterDivs();
                 nextButtonDiv.hide();
             } else {
                 alert('Please select a character!');
@@ -115,6 +125,41 @@ function drawCharacterSelectScreen() {
         centerDiv(nextButtonDiv, height - 100);
     }
 }
+
+// Handle character selection logic when mouse is released
+function mouseReleased() {
+    if (screen === 2) {
+        handleCharacterSelection();
+    }
+}
+
+// Helper function to detect character selection
+function handleCharacterSelection() {
+    let imageSize = 150;
+    let spacing = width / 4;
+    let yOffset = height / 3;
+
+    for (let i = 0; i < characters.length; i++) {
+        let x = spacing * (i + 1) - imageSize / 2;
+
+        if (
+            mouseX > x &&
+            mouseX < x + imageSize &&
+            mouseY > yOffset &&
+            mouseY < yOffset + imageSize
+        ) {
+            if (selectedCharacterIndex === i) {
+                selectedCharacterIndex = null;
+                selectedCharacter = null;
+            } else {
+                selectedCharacterIndex = i;
+                selectedCharacter = `char${i + 1}`;
+                console.log(`Selected: ${selectedCharacter}`);
+            }
+        }
+    }
+}
+
 
 function createCharacterDivs() {
     for (let i = 0; i < characters.length; i++) {
