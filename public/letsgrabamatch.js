@@ -1,3 +1,4 @@
+
 // Global variables to manage screens and selections
 let screen = 1; // Track the current screen (1: Welcome, 2: Character Selection, 3: Main App)
 let selectedCharacter = null; // Store the selected character
@@ -77,23 +78,22 @@ function draw() {
 
 // --- Welcome Screen ---
 function drawWelcomeScreen() {
-    console.log('Welcome Screen');
-    // background('#87CEFA'); // Light blue background
+    background('#87CEFA'); // Light blue background
 
-    // imageMode(CENTER);
-    // image(titleImg, windowWidth / 2, windowHeight / 3, 329, 132); // Display title image
+    imageMode(CENTER);
+    image(titleImg, windowWidth / 2, windowHeight / 3, 329, 132); // Display title image
 
-    // // // Display the "Let's Grab A Match!" message (centered)
-    // // textAlign(CENTER, CENTER);
-    // // textSize(50);
-    // // fill(0);
-    // // text("Let's Grab A Match!", width / 2, height / 3);
+    // // Display the "Let's Grab A Match!" message (centered)
+    // textAlign(CENTER, CENTER);
+    // textSize(50);
+    // fill(0);
+    // text("Let's Grab A Match!", width / 2, height / 3);
 
 
-    // // Create a custom Next button to move to character selection
-    // createCustomButton('Next', width / 2, height / 2 + 100, () => {
-    //     screen = 2; // Move to the character selection screen
-    // });
+    // Create a custom Next button to move to character selection
+    createCustomButton('Next', width / 2, height / 2 + 100, () => {
+        screen = 2; // Move to the character selection screen
+    });
 }
 
 // --- Character Selection Screen ---
@@ -114,6 +114,8 @@ function drawCharacterSelectScreen() {
         // Check for character selection
         if (touchInImageBounds(x, y, 100, 100)) {
             selectedCharacter = `char${i + 1}`; // Store selected character
+
+
         }
     }
     // Create a custom Next button to move to the main app screen
@@ -262,4 +264,3 @@ window.addEventListener('load', () => {
         window.scrollTo(0, 1); // Scroll slightly to hide the address bar
     }, 0);
 });
-
