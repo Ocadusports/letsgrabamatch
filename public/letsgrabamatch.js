@@ -46,19 +46,15 @@ function setupWelcomeScreen() {
 
 // Setup Enable Motion Button
 function setupEnableMotionButton() {
-    let motionButton = createDiv('GIVE PERMISSIONS');
-    styleDiv(motionButton, 300, 50); // Apply initial styling
-
-    motionButton.mousePressed(() => {
-        requestMotionPermission(motionButton); // Pass button for feedback
-    });
-
+    let motionButton = createDiv('Enable Motion');
+    styleDiv(motionButton, 300, 50);
+    motionButton.mousePressed(requestMotionPermission);
     centerDiv(motionButton, windowHeight / 1.5);
     motionButton.hide();
     window.motionButton = motionButton;
 }
 
-// Request Motion Permission (iOS) with Feedback
+// Request Motion Permission (iOS) with feedback
 function requestMotionPermission(motionButton) {
     if (typeof DeviceMotionEvent !== 'undefined' &&
         typeof DeviceMotionEvent.requestPermission === 'function') {
@@ -66,7 +62,7 @@ function requestMotionPermission(motionButton) {
             .then(response => {
                 if (response === 'granted') {
                     window.addEventListener('devicemotion', handleMotion);
-                    disableButton(motionButton); // Disable button on success
+                    disableButton(motionButton); // Disable button after permission
                 } else {
                     alert('Motion permission denied.');
                 }
@@ -74,18 +70,31 @@ function requestMotionPermission(motionButton) {
             .catch(err => alert('Error requesting motion permission: ' + err));
     } else {
         window.addEventListener('devicemotion', handleMotion);
-        disableButton(motionButton); // Disable button if permission not needed
+        disableButton(motionButton); // Disable button if permission not required
     }
 }
 
-// Helper function to disable and style the button as grey
+// Disable Button and give feedback
 function disableButton(button) {
-    button.style('background-color', 'grey'); // Change to grey
-    button.style('color', 'white'); // Change text color to white
-    button.style('cursor', 'default'); // Change cursor to default
-    button.mousePressed(null); // Remove click functionality
+    button.style('background-color', 'grey');
+    button.style('color', 'white');
+    button.style('cursor', 'default');
+    button.mousePressed(null); // Disable click
 }
 
+// Handle motion events and track acceleration values
+function handleMotion(event) {
+    const { x, y, z } = event.acceleration;
+    motionValue = { x, y, z };
+
+    if (abs(x) > 1 || abs(y) > 1 || abs(z) > 1) {
+        isStationary = false;
+        lastStationaryTime = millis(); // Reset stationary timer
+    } else if (!isStationary) {
+        isStationary = true;
+        lastStationaryTime = millis(); // Mark stationary and track time
+    }
+}
 
 // Style Div Helper Function
 function styleDiv(div, width, height) {
@@ -112,6 +121,11 @@ function draw() {
     if (screen === 1) drawWelcomeScreen();
     else if (screen === 2) drawCharacterSelectScreen();
     else if (screen === 3) drawMainAppScreen();
+
+    // Display acceleration values for debugging
+    text(`Motion X: ${motionValue.x}`, 10, 80);
+    text(`Motion Y: ${motionValue.y}`, 10, 110);
+    text(`Motion Z: ${motionValue.z}`, 10, 140);
 }
 
 // Draw Welcome Screen
@@ -166,6 +180,7 @@ function drawMainAppScreen() {
     image(animation, width / 2, height / 3, 270, 309);
 
     drawEnergyBar();
+    drawDebugInfo(); // Draw debug information for motion values
     adjustHealth();
 }
 
@@ -203,38 +218,24 @@ function drawEnergyBar() {
     text(`Energy: ${floor(health)}%`, width / 2, y + barHeight + 20);
 }
 
-// Request Motion Permission (iOS)
-function requestMotionPermission() {
-    if (typeof DeviceMotionEvent !== 'undefined' &&
-        typeof DeviceMotionEvent.requestPermission === 'function') {
-        DeviceMotionEvent.requestPermission()
-            .then(response => {
-                if (response === 'granted') {
-                    window.addEventListener('devicemotion', handleMotion);
-                } else alert('Motion permission denied.');
-            })
-            .catch(err => alert('Error requesting motion permission: ' + err));
-    } else window.addEventListener('devicemotion', handleMotion);
+// Draw Debug Info with Motion Values
+function drawDebugInfo() {
+    fill(0);
+    textSize(16);
+    textAlign(LEFT);
+    text(`X: ${motionValue.x.toFixed(2)}`, 10, height - 70);
+    text(`Y: ${motionValue.y.toFixed(2)}`, 10, height - 50);
+    text(`Z: ${motionValue.z.toFixed(2)}`, 10, height - 30);
 }
 
-// Handle Motion Events
-function handleMotion(event) {
-    const { x, y, z } = event.acceleration;
-    motionValue = { x, y, z };
-    if (abs(x) > 1 || abs(y) > 1 || abs(z) > 1) {
-        isStationary = false;
-        lastStationaryTime = millis();
-    } else if (!isStationary) {
-        isStationary = true;
-        lastStationaryTime = millis();
-    }
-}
 
 // Adjust Health Based on Motion
 function adjustHealth() {
     if (isStationary && millis() - lastStationaryTime >= 20000) {
-        health = min(100, health + 1);
-    } else health = max(0, health - 0.1);
+        health = min(100, health + 0.1); // Increase health slowly
+    } else {
+        health = max(0, health - 0.5); // Decrease health quickly when moving
+    }
 }
 
 // Get Appropriate Animation for Health
