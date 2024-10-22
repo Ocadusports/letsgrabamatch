@@ -1,22 +1,25 @@
-let screen = 1; // Track current screen (1: Welcome, 2: Character Selection, 3: Main App)
-let selectedCharacter = null; // Store selected character
-let characters = []; // Hold character images
-let animations = {}; // Store character animations
-let titleImg, nextButtonDiv, energyBarDiv, characterDivs = [];
-let health = 20; // Start health at 20%
-let motionValue = { x: 0, y: 0, z: 0 }; // Track motion
+// Global variables to manage screens and selections
+let screen = 1; // Current screen (1: Welcome, 2: Character Selection, 3: Main App)
+let selectedCharacter = null;
+let characters = [];
+let animations = {};
+let titleImg;
+let nextButtonDiv, energyBarDiv;
+
+// Health management variables
+let health = 20;
+let motionValue = { x: 0, y: 0, z: 0 };
 let lastStationaryTime = 0;
 let isStationary = false;
-let updateInterval = 500; // Update every 500ms
-let selectedCharacterIndex = null; // Store selected character index
+let updateInterval = 500;
 
-
+// Preload character images and animations
 function preload() {
     titleImg = loadImage('LGAM 1.png');
     characters = [
-        loadImage('char1.png'),
-        loadImage('char2.png'),
-        loadImage('char3.png'),
+        loadImage('Hippo.png'),
+        loadImage('Weasel.png'),
+        loadImage('Porcupine.png'),
     ];
     animations = {
         char1: { sleep: loadImage('char1_sleep.png'), normal: loadImage('char1.png'), powerup: loadImage('char1_powerup.png'), onFire: loadImage('char1_fire.png') },
@@ -25,23 +28,22 @@ function preload() {
     };
 }
 
+// Setup the canvas and initialize screens
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    setupWelcomeScreen();
-    setupEnableMotionButton();
+    setupWelcomeScreen(); // Call the welcome screen setup
+    setupEnableMotionButton(); // Setup motion button for main app screen
 }
 
-// Set up Welcome Screen
+// Setup the Welcome Screen
 function setupWelcomeScreen() {
     nextButtonDiv = createDiv('Next');
     styleDiv(nextButtonDiv, 150, 50);
-    nextButtonDiv.mousePressed(() => {
-        screen = 2; // Move to character selection
-        nextButtonDiv.hide(); // Hide button after use
-    });
+    nextButtonDiv.mousePressed(() => screen = 2); // Move to character selection
     centerDiv(nextButtonDiv, windowHeight / 2 + 100);
 }
 
+// Setup Enable Motion Button
 function setupEnableMotionButton() {
     let motionButton = createDiv('Enable Motion');
     styleDiv(motionButton, 150, 50);
@@ -51,12 +53,7 @@ function setupEnableMotionButton() {
     window.motionButton = motionButton;
 }
 
-// Center and style div elements
-function centerDiv(div, yOffset) {
-    const x = (windowWidth - div.width) / 2;
-    div.position(x, yOffset);
-}
-
+// Style Div Helper Function
 function styleDiv(div, width, height) {
     div.size(width, height);
     div.style('background-color', '#FFC107');
@@ -70,7 +67,12 @@ function styleDiv(div, width, height) {
     div.style('box-shadow', '0px 10px rgba(0, 0, 0, 1)');
 }
 
-// Main draw loop
+// Center Div Helper Function
+function centerDiv(div, yOffset) {
+    div.position((windowWidth - div.width) / 2, yOffset);
+}
+
+// Main Draw Loop to Manage Screens
 function draw() {
     background(255);
     if (screen === 1) drawWelcomeScreen();
@@ -85,105 +87,30 @@ function drawWelcomeScreen() {
     image(titleImg, width / 2, height / 3, 329, 132);
 }
 
-// --- Character Selection Screen ---
+// Draw Character Selection Screen
 function drawCharacterSelectScreen() {
-    background(240);
     textAlign(CENTER, CENTER);
     textSize(32);
-    fill(0);
     text('CHOOSE A CHARACTER', width / 2, 50);
 
-    let imageSize = 150;
-    let spacing = width / 4;
-    let yOffset = height / 3;
-
     for (let i = 0; i < characters.length; i++) {
-        let x = spacing * (i + 1) - imageSize / 2;
+        let img = characters[i];
+        let x = width / 2 - 50;
+        let y = 150 + i * 150;
+        image(img, x, y, 100, 100);
 
-        if (selectedCharacterIndex === i) {
-            stroke('#FFC107');
-            strokeWeight(5);
-            rectMode(CENTER);
-            rect(x + imageSize / 2, yOffset + imageSize / 2, imageSize + 10, imageSize + 10, 20);
-        }
-
-        noStroke();
-        image(characters[i], x, yOffset, imageSize, imageSize);
-    }
-
-    if (!nextButtonDiv) {
-        nextButtonDiv = createDiv('Next');
-        styleDiv(nextButtonDiv, 150, 50);
-        nextButtonDiv.mousePressed(() => {
-            if (selectedCharacter) {
-                screen = 3;
-                nextButtonDiv.hide();
-            } else {
-                alert('Please select a character!');
-            }
-        });
-        centerDiv(nextButtonDiv, height - 100);
-    }
-}
-
-// Handle character selection logic when mouse is released
-function mouseReleased() {
-    if (screen === 2) {
-        handleCharacterSelection();
-    }
-}
-
-// Helper function to detect character selection
-function handleCharacterSelection() {
-    let imageSize = 150;
-    let spacing = width / 4;
-    let yOffset = height / 3;
-
-    for (let i = 0; i < characters.length; i++) {
-        let x = spacing * (i + 1) - imageSize / 2;
-
-        if (
-            mouseX > x &&
-            mouseX < x + imageSize &&
-            mouseY > yOffset &&
-            mouseY < yOffset + imageSize
-        ) {
-            if (selectedCharacterIndex === i) {
-                selectedCharacterIndex = null;
-                selectedCharacter = null;
-            } else {
-                selectedCharacterIndex = i;
-                selectedCharacter = `char${i + 1}`;
-                console.log(`Selected: ${selectedCharacter}`);
-            }
-        }
-    }
-}
-
-
-function createCharacterDivs() {
-    for (let i = 0; i < characters.length; i++) {
-        let charDiv = createDiv('').style('cursor', 'pointer');
-
-        // Use createImg() with both src and alt text
-        let img = createImg(`char${i + 1}.png`, `Character ${i + 1}`);
-        img.size(150, 150); // Set size
-
-        charDiv.child(img); // Add image to the div
-
-        // Set up click event to select the character
-        charDiv.mousePressed(() => {
+        if (touchInImageBounds(x, y, 100, 100)) {
             selectedCharacter = `char${i + 1}`;
-            console.log(`Selected: ${selectedCharacter}`);
-        });
-
-        characterDivs.push(charDiv); // Store the div for future use
+        }
     }
-}
 
-
-function hideCharacterDivs() {
-    characterDivs.forEach(div => div.hide());
+    nextButtonDiv = createDiv('Next');
+    styleDiv(nextButtonDiv, 150, 50);
+    nextButtonDiv.mousePressed(() => {
+        if (selectedCharacter) screen = 3;
+        else alert('Please select a character!');
+    });
+    centerDiv(nextButtonDiv, height - 100);
 }
 
 // Draw Main App Screen
@@ -194,6 +121,7 @@ function drawMainAppScreen() {
     drawEnergyBar();
 }
 
+// Draw Energy Bar
 function drawEnergyBar() {
     if (!energyBarDiv) {
         energyBarDiv = createDiv('');
@@ -205,26 +133,37 @@ function drawEnergyBar() {
     energyBarDiv.size(healthWidth, 30);
 }
 
-// Motion Permission for iOS
+// Detect Touches within Image Boundaries
+function touchInImageBounds(x, y, imgWidth, imgHeight) {
+    if (touches.length > 0) {
+        let touch = touches[0];
+        return touch.pageX > x && touch.pageX < x + imgWidth &&
+            touch.pageY > y && touch.pageY < y + imgHeight;
+    } else if (mouseIsPressed) {
+        return mouseX > x && mouseX < x + imgWidth &&
+            mouseY > y && mouseY < y + imgHeight;
+    }
+    return false;
+}
+
+// Request Motion Permission (iOS)
 function requestMotionPermission() {
     if (typeof DeviceMotionEvent !== 'undefined' &&
         typeof DeviceMotionEvent.requestPermission === 'function') {
-        DeviceMotionEvent.requestPermission().then(response => {
-            if (response === 'granted') {
-                window.addEventListener('devicemotion', handleMotion);
-            } else {
-                alert('Motion permission denied.');
-            }
-        }).catch(err => alert('Error: ' + err));
-    } else {
-        window.addEventListener('devicemotion', handleMotion);
-    }
+        DeviceMotionEvent.requestPermission()
+            .then(response => {
+                if (response === 'granted') {
+                    window.addEventListener('devicemotion', handleMotion);
+                } else alert('Motion permission denied.');
+            })
+            .catch(err => alert('Error requesting motion permission: ' + err));
+    } else window.addEventListener('devicemotion', handleMotion);
 }
 
+// Handle Motion Events
 function handleMotion(event) {
     const { x, y, z } = event.acceleration;
     motionValue = { x, y, z };
-
     if (abs(x) > 1 || abs(y) > 1 || abs(z) > 1) {
         isStationary = false;
         lastStationaryTime = millis();
@@ -234,6 +173,14 @@ function handleMotion(event) {
     }
 }
 
+// Adjust Health Based on Motion
+function adjustHealth() {
+    if (isStationary && millis() - lastStationaryTime >= 20000) {
+        health = min(100, health + 1);
+    } else health = max(0, health - 0.1);
+}
+
+// Get Appropriate Animation for Health
 function getAnimationForHealth() {
     if (health <= 0) return animations[selectedCharacter].sleep;
     if (health <= 10) return animations[selectedCharacter].normal;
