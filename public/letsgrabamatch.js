@@ -35,7 +35,7 @@ function setup() {
     setupEnableMotionButton(); // Setup motion button for main app screen
 }
 
-// Setup the Welcome Screen
+// Setup the Welcome Screen 
 function setupWelcomeScreen() {
     nextButtonDiv = createDiv('Next');
     styleDiv(nextButtonDiv, 150, 50);
@@ -89,6 +89,9 @@ function drawWelcomeScreen() {
 
 // Draw Character Selection Screen
 function drawCharacterSelectScreen() {
+    // Hide the Next button from the Welcome Screen
+    if (nextButtonDiv) nextButtonDiv.hide();
+
     textAlign(CENTER, CENTER);
     textSize(32);
     text('CHOOSE A CHARACTER', width / 2, 50);
@@ -112,6 +115,7 @@ function drawCharacterSelectScreen() {
     });
     centerDiv(nextButtonDiv, height - 100);
 }
+
 
 // Draw Main App Screen
 function drawMainAppScreen() {
