@@ -80,7 +80,7 @@ function drawWelcomeScreen() {
     background('#87CEFA'); // Light blue background
 
     imageMode(CENTER);
-    image(titleImg, 32, 294, 329, 132); // Display title image
+    image(titleImg, 80, 80, 329, 132); // Display title image
 
     // // Display the "Let's Grab A Match!" message (centered)
     // textAlign(CENTER, CENTER);
