@@ -12,9 +12,9 @@ let updateInterval = 500; // Update every 500ms
 function preload() {
     titleImg = loadImage('LGAM 1.png');
     characters = [
-        loadImage('Hippo.png'),
-        loadImage('Weasel.png'),
-        loadImage('Porcupine.png'),
+        loadImage('Char1.png'),
+        loadImage('Char2.png'),
+        loadImage('Char3.png'),
     ];
     animations = {
         char1: { sleep: loadImage('char1_sleep.png'), normal: loadImage('char1.png'), powerup: loadImage('char1_powerup.png'), onFire: loadImage('char1_fire.png') },
@@ -65,7 +65,7 @@ function styleDiv(div, width, height) {
     div.style('line-height', `${height}px`);
     div.style('border-radius', '25px');
     div.style('cursor', 'pointer');
-    div.style('box-shadow', '0px 8px 10px rgba(0, 0, 0, 0.4)');
+    div.style('box-shadow', '0px 10px rgba(0, 0, 0, 1)');
 }
 
 // Main draw loop
@@ -119,14 +119,23 @@ function drawCharacterSelectScreen() {
 function createCharacterDivs() {
     for (let i = 0; i < characters.length; i++) {
         let charDiv = createDiv('').style('cursor', 'pointer');
-        charDiv.child(createImg(`char${i + 1}.png`).size(150, 150));
+
+        // Use createImg() with both src and alt text
+        let img = createImg(`char${i + 1}.png`, `Character ${i + 1}`);
+        img.size(150, 150); // Set size
+
+        charDiv.child(img); // Add image to the div
+
+        // Set up click event to select the character
         charDiv.mousePressed(() => {
             selectedCharacter = `char${i + 1}`;
             console.log(`Selected: ${selectedCharacter}`);
         });
-        characterDivs.push(charDiv);
+
+        characterDivs.push(charDiv); // Store the div for future use
     }
 }
+
 
 function hideCharacterDivs() {
     characterDivs.forEach(div => div.hide());
