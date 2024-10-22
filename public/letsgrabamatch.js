@@ -5,6 +5,7 @@ let characters = [];
 let animations = {};
 let titleImg;
 let nextButtonDiv, energyBarDiv;
+let characterButtons = []; // Store character image buttons
 
 // Health management variables
 let health = 20;
@@ -17,9 +18,9 @@ let updateInterval = 500;
 function preload() {
     titleImg = loadImage('LGAM 1.png');
     characters = [
-        loadImage('Hippo.png'),
-        loadImage('Weasel.png'),
-        loadImage('Porcupine.png'),
+        { img: 'Hippo.png', name: 'char1' },
+        { img: 'Weasel.png', name: 'char2' },
+        { img: 'Porcupine.png', name: 'char3' },
     ];
     animations = {
         char1: { sleep: loadImage('char1_sleep.png'), normal: loadImage('Hippo.png'), powerup: loadImage('char1_powerup.png'), onFire: loadImage('char1_fire.png') },
@@ -31,13 +32,13 @@ function preload() {
 // Setup the canvas and initialize screens
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    setupWelcomeScreen(); // Call the welcome screen setup
-    setupEnableMotionButton(); // Setup motion button for main app screen
+    setupWelcomeScreen();
+    setupEnableMotionButton();
 }
 
 // Setup the Welcome Screen 
 function setupWelcomeScreen() {
-    nextButtonDiv = createDiv('NEXT');
+    nextButtonDiv = createDiv('Next');
     styleDiv(nextButtonDiv, 150, 50);
     nextButtonDiv.mousePressed(() => screen = 2); // Move to character selection
     centerDiv(nextButtonDiv, windowHeight / 2 + 100);
@@ -64,7 +65,7 @@ function styleDiv(div, width, height) {
     div.style('line-height', `${height}px`);
     div.style('border-radius', '25px');
     div.style('cursor', 'pointer');
-    div.style('box-shadow', '0px 7px rgba(0, 0, 0, 1)');
+    div.style('box-shadow', '0px 10px rgba(0, 0, 0, 1)');
 }
 
 // Center Div Helper Function
@@ -89,34 +90,34 @@ function drawWelcomeScreen() {
 
 // Draw Character Selection Screen
 function drawCharacterSelectScreen() {
-    // Hide the Next button from the Welcome Screen
-    if (nextButtonDiv) nextButtonDiv.hide();
+    if (nextButtonDiv) nextButtonDiv.hide(); // Hide the welcome screen button
 
     textAlign(CENTER, CENTER);
     textSize(32);
     text('CHOOSE A CHARACTER', width / 2, 50);
 
-    for (let i = 0; i < characters.length; i++) {
-        var button;
-        let img = characters[i];
-        let x = width / 2;
-        let y = 200 + i * 150;
-        button = createImg(img, x, y, 160, 182);
+    // Create buttons for each character if not already created
+    if (characterButtons.length === 0) {
+        for (let i = 0; i < characters.length; i++) {
+            let x = width / 2 - 80; // Adjust for centering
+            let y = 150 + i * 200; // Space between each character
 
-        // if (touchInImageBounds(x, y, 100, 100)) {
-        //     selectedCharacter = `char${i + 1}`;
-        // }
+            // Create the image button
+            let button = createImg(characters[i].img, characters[i].name);
+            button.size(160, 182); // Set the size of the image button
+            button.position(x, y); // Position the image button on the screen
+
+            // Add click functionality to select the character
+            button.mousePressed(() => {
+                selectedCharacter = characters[i].name; // Store selected character
+                screen = 3; // Move to the main app screen
+            });
+
+            // Store the button in the characterButtons array
+            characterButtons.push(button);
+        }
     }
-
-    // nextButtonDiv = createDiv('Next');
-    // styleDiv(nextButtonDiv, 150, 50);
-    // nextButtonDiv.mousePressed(() => {
-    //     if (selectedCharacter) screen = 3;
-    //     else alert('Please select a character!');
-    // });
-    // centerDiv(nextButtonDiv, height - 100);
 }
-
 
 // Draw Main App Screen
 function drawMainAppScreen() {
@@ -136,19 +137,6 @@ function drawEnergyBar() {
     }
     let healthWidth = map(health, 0, 100, 0, 200);
     energyBarDiv.size(healthWidth, 30);
-}
-
-// Detect Touches within Image Boundaries
-function touchInImageBounds(x, y, imgWidth, imgHeight) {
-    if (touches.length > 0) {
-        let touch = touches[0];
-        return touch.pageX > x && touch.pageX < x + imgWidth &&
-            touch.pageY > y && touch.pageY < y + imgHeight;
-    } else if (mouseIsPressed) {
-        return mouseX > x && mouseX < x + imgWidth &&
-            mouseY > y && mouseY < y + imgHeight;
-    }
-    return false;
 }
 
 // Request Motion Permission (iOS)
