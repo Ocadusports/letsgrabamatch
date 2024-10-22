@@ -37,7 +37,7 @@ function setup() {
 
 // Setup the Welcome Screen
 function setupWelcomeScreen() {
-    nextButtonDiv = createDiv('Next');
+    nextButtonDiv = createDiv('NEXT');
     styleDiv(nextButtonDiv, 150, 50);
     nextButtonDiv.mousePressed(() => screen = 2); // Move to character selection
     centerDiv(nextButtonDiv, windowHeight / 2 + 100);
