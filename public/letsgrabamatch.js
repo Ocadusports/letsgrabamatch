@@ -2,6 +2,7 @@
 let screen = 1; // Current screen (1: Welcome, 2: Character Selection, 3: Main App)
 let selectedCharacter = null;
 let characters = [];
+let characterButtons = []; // Store image buttons for characters
 let animations = {};
 let titleImg;
 let nextButtonDiv, energyBarDiv;
