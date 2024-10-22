@@ -199,9 +199,23 @@ function drawMainAppScreen() {
     let animation = getAnimationForHealth();
     image(animation, width / 2, height / 3, 270, 309);
 
+    // Draw the health bar below the image
     drawEnergyBar();
-    drawDebugInfo(); // Draw debug information for motion values
+
+    // Adjust the position of the motion button at the bottom
+    positionMotionButton();
+
+    // Display debug information with motion values
+    drawDebugInfo();
+
+    // Adjust health based on motion
     adjustHealth();
+}
+
+// Function to position the motion button at the bottom of the screen
+function positionMotionButton() {
+    let buttonY = height - 70; // Adjust the position at the bottom
+    window.motionButton.position((width - window.motionButton.width) / 2, buttonY);
 }
 
 // Helper function to hide character buttons
@@ -217,7 +231,7 @@ function drawEnergyBar() {
     let barWidth = 300;
     let barHeight = 30;
     let x = (width - barWidth) / 2;
-    let y = height - 100;
+    let y = height / 2;
 
     // Background of the bar
     stroke(0);
@@ -227,7 +241,8 @@ function drawEnergyBar() {
 
     // Fill the bar based on the health value
     let fillWidth = map(health, 0, 100, 0, barWidth);
-    noStroke();
+    stroke(0);
+    strokeWeight(2);
     fill('#FFC107');
     rect(x, y, fillWidth, barHeight, 15); // Rounded corners
 
@@ -262,6 +277,6 @@ function adjustHealth() {
 function getAnimationForHealth() {
     if (health <= 20) return animations[selectedCharacter].sleep;
     if (health <= 50) return animations[selectedCharacter].normal;
-    if (health <= 70) return animations[selectedCharacter].powerUp;
+    if (health <= 90) return animations[selectedCharacter].powerUp;
     return animations[selectedCharacter].onFire;
 }
