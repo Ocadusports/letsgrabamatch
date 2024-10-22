@@ -46,7 +46,7 @@ function setupWelcomeScreen() {
 
 // Setup the Enable Motion Button with proper styling
 function setupEnableMotionButton() {
-    let motionButton = createDiv('ENABLE MOTION');
+    let motionButton = createDiv('Enable Motion');
     styleButton(motionButton, 150, 50); // Apply initial styling
 
     motionButton.mousePressed(() => requestMotionPermission(motionButton)); // Handle click
