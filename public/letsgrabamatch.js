@@ -12,9 +12,9 @@ let updateInterval = 500; // Update every 500ms
 function preload() {
     titleImg = loadImage('LGAM 1.png');
     characters = [
-        loadImage('Char1.png'),
-        loadImage('Char2.png'),
-        loadImage('Char3.png'),
+        loadImage('char1.png'),
+        loadImage('char2.png'),
+        loadImage('char3.png'),
     ];
     animations = {
         char1: { sleep: loadImage('char1_sleep.png'), normal: loadImage('char1.png'), powerup: loadImage('char1_powerup.png'), onFire: loadImage('char1_fire.png') },
