@@ -44,17 +44,19 @@ function setupWelcomeScreen() {
     centerDiv(nextButtonDiv, windowHeight / 2 + 100);
 }
 
-// Setup Enable Motion Button
+// Setup the Enable Motion Button with proper styling
 function setupEnableMotionButton() {
     let motionButton = createDiv('Enable Motion');
-    styleDiv(motionButton, 300, 50);
-    motionButton.mousePressed(requestMotionPermission);
-    centerDiv(motionButton, windowHeight / 1.5);
-    motionButton.hide();
-    window.motionButton = motionButton;
+    styleButton(motionButton, 150, 50); // Apply initial styling
+
+    motionButton.mousePressed(() => requestMotionPermission(motionButton)); // Handle click
+    centerDiv(motionButton, windowHeight / 1.5); // Center the button
+    motionButton.hide(); // Initially hide it
+
+    window.motionButton = motionButton; // Store the button globally
 }
 
-// Request Motion Permission (iOS) with feedback
+// Function to request motion permission and give feedback on success
 function requestMotionPermission(motionButton) {
     if (typeof DeviceMotionEvent !== 'undefined' &&
         typeof DeviceMotionEvent.requestPermission === 'function') {
@@ -62,24 +64,32 @@ function requestMotionPermission(motionButton) {
             .then(response => {
                 if (response === 'granted') {
                     window.addEventListener('devicemotion', handleMotion);
-                    disableButton(motionButton); // Disable button after permission
+                    disableButton(motionButton); // Disable button upon success
                 } else {
                     alert('Motion permission denied.');
                 }
             })
-            .catch(err => alert('Error requesting motion permission: ' + err));
+            .catch(err => {
+                console.error(err);
+                alert('Error requesting motion permission: ' + err);
+            });
     } else {
         window.addEventListener('devicemotion', handleMotion);
-        disableButton(motionButton); // Disable button if permission not required
+        disableButton(motionButton); // Disable button if no permission is required
     }
 }
 
-// Disable Button and give feedback
+// Disable the button by changing its style and disabling the click handler
 function disableButton(button) {
-    button.style('background-color', 'grey');
-    button.style('color', 'white');
-    button.style('cursor', 'default');
-    button.mousePressed(null); // Disable click
+    button.style('background-color', 'grey'); // Change to grey
+    button.style('color', 'white'); // Change text color to white
+    button.style('cursor', 'default'); // Set cursor to default
+    button.mousePressed(null); // Disable the click handler
+}
+
+// Center the button on the screen
+function centerDiv(div, yOffset) {
+    div.position((windowWidth - div.width) / 2, yOffset);
 }
 
 // Handle motion events and track acceleration values
@@ -110,10 +120,20 @@ function styleDiv(div, width, height) {
     div.style('box-shadow', '0px 7px rgba(0, 0, 0, 1)');
 }
 
-// Center Div Helper Function
-function centerDiv(div, yOffset) {
-    div.position((windowWidth - div.width) / 2, yOffset);
+// Helper function to style the button
+function styleButton(button, width, height) {
+    button.size(width, height); // Set button size
+    button.style('background-color', '#FFC107'); // Yellow background
+    button.style('color', 'black'); // Black text
+    button.style('font-family', 'Arial, sans-serif'); // Font family
+    button.style('font-size', '20px'); // Font size
+    button.style('text-align', 'center'); // Center the text
+    button.style('line-height', `${height}px`); // Vertically center the text
+    button.style('border-radius', '25px'); // Rounded corners
+    button.style('cursor', 'pointer'); // Pointer cursor on hover
+    button.style('box-shadow', '0px 5px rgba(0, 0, 0, 0.5)'); // Shadow effect
 }
+
 
 // Main Draw Loop to Manage Screens
 function draw() {
