@@ -1,0 +1,50 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #87CEFA;
+    /* Light blue background */
+}
+
+canvas {
+    display: block;
+    touch-action: none;
+    /* Ensure touch events aren't blocked */
+}
+
+/* General button styling */
+.custom-button {
+    background-color: #FFC107;
+    /* Yellow background */
+    color: black;
+    /* Button text color */
+    font-family: 'Arial', sans-serif;
+    /* Font style */
+    font-size: 24px;
+    /* Font size for better visibility */
+    font-weight: bold;
+    /* Bold text */
+    border: none;
+    /* No border */
+    padding: 15px 50px;
+    /* Add padding for larger size */
+    border-radius: 40px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Pointer cursor */
+    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.4);
+    /* Drop shadow */
+    transition: transform 0.1s ease;
+    /* Smooth click animation */
+    display: inline-block;
+}
+
+.custom-button:active {
+    transform: scale(0.95);
+    /* Button shrinks slightly on click */
+}
