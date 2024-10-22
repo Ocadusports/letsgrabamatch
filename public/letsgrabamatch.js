@@ -6,9 +6,6 @@ let animations = {};
 let titleImg;
 let nextButtonDiv, energyBarDiv;
 
-// Variables to store selection state
-let selectedCharacterIndex = null; // Index of the selected character
-
 // Health management variables
 let health = 20;
 let motionValue = { x: 0, y: 0, z: 0 };
@@ -92,68 +89,29 @@ function drawWelcomeScreen() {
 
 // Draw Character Selection Screen
 function drawCharacterSelectScreen() {
-    // Hide the Next button from the Welcome Screen
-    if (nextButtonDiv) nextButtonDiv.hide();
-
-    background(255); // Set background to white to avoid leftover artifacts
-
     textAlign(CENTER, CENTER);
     textSize(32);
-    fill(0); // Set text color to black
     text('CHOOSE A CHARACTER', width / 2, 50);
-
-    // Calculate the spacing and alignment for the images
-    let spacing = 150; // Vertical spacing between images
-    let startY = height / 3 - (characters.length * spacing) / 2; // Start position for the first image
 
     for (let i = 0; i < characters.length; i++) {
         let img = characters[i];
-        let x = width / 2 - 50; // Centered horizontally
-        let y = startY + i * spacing; // Vertical position for each image
+        let x = width / 2 - 50;
+        let y = 150 + i * 150;
+        image(img, x, y, 100, 100);
 
-        // Apply stroke if the character is selected
-        if (selectedCharacterIndex === i) {
-            stroke(0, 255, 0); // Green stroke for selected character
-            strokeWeight(4);
-        } else {
-            noStroke(); // No stroke for unselected characters
-        }
-
-        // Draw the character image with a border
-        rectMode(CENTER);
-        rect(x + 50, y + 50, 100, 100); // Draw a rectangle behind the image
-        image(img, x, y, 100, 100); // Display the character image
-
-        // Handle click interactions
-        if (mouseIsPressed && mouseInBounds(x, y, 100, 100)) {
-            if (selectedCharacterIndex === i) {
-                // Deselect if the same character is clicked again
-                selectedCharacterIndex = null;
-                selectedCharacter = null;
-            } else {
-                // Select the character and store its index
-                selectedCharacterIndex = i;
-                selectedCharacter = `char${i + 1}`;
-            }
+        if (touchInImageBounds(x, y, 100, 100)) {
+            selectedCharacter = `char${i + 1}`;
         }
     }
 
-    // Create the Next button
     nextButtonDiv = createDiv('Next');
     styleDiv(nextButtonDiv, 150, 50);
     nextButtonDiv.mousePressed(() => {
-        if (selectedCharacter) screen = 3; // Proceed if a character is selected
+        if (selectedCharacter) screen = 3;
         else alert('Please select a character!');
     });
     centerDiv(nextButtonDiv, height - 100);
 }
-
-// Helper function to check if the mouse is within image bounds
-function mouseInBounds(x, y, imgWidth, imgHeight) {
-    return mouseX > x && mouseX < x + imgWidth &&
-        mouseY > y && mouseY < y + imgHeight;
-}
-
 
 // Draw Main App Screen
 function drawMainAppScreen() {
