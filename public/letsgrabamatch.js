@@ -1,13 +1,10 @@
-// Global variables to manage screens and selections
-let screen = 1; // Current screen (1: Welcome, 2: Character Selection, 3: Main App)
+let screen = 1; // Current screen
 let selectedCharacter = null;
 let characters = [];
 let animations = {};
 let titleImg;
-let nextButtonDiv, energyBarDiv;
-
-// Health management variables
-let health = 20;
+let nextButtonDiv, energyBarDiv, characterDivs = [];
+let health = 20; // Start health at 20%
 let motionValue = { x: 0, y: 0, z: 0 };
 let lastStationaryTime = 0;
 let isStationary = false;
@@ -28,18 +25,21 @@ function preload() {
     };
 }
 
-// Setup the canvas and initialize screens
+// Setup the canvas and buttons
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    setupWelcomeScreen(); // Call the welcome screen setup
-    setupEnableMotionButton(); // Setup motion button for main app screen
+    setupWelcomeScreen();
+    setupEnableMotionButton();
 }
 
 // Setup the Welcome Screen
 function setupWelcomeScreen() {
-    nextButtonDiv = createDiv('NEXT');
+    nextButtonDiv = createDiv('Next');
     styleDiv(nextButtonDiv, 150, 50);
-    nextButtonDiv.mousePressed(() => screen = 2); // Move to character selection
+    nextButtonDiv.mousePressed(() => {
+        screen = 2; // Move to character selection
+        nextButtonDiv.hide(); // Hide the button when transitioning
+    });
     centerDiv(nextButtonDiv, windowHeight / 2 + 100);
 }
 
@@ -53,7 +53,12 @@ function setupEnableMotionButton() {
     window.motionButton = motionButton;
 }
 
-// Style Div Helper Function
+// Center and style div elements
+function centerDiv(div, yOffset) {
+    const x = (windowWidth - div.width) / 2;
+    div.position(x, yOffset);
+}
+
 function styleDiv(div, width, height) {
     div.size(width, height);
     div.style('background-color', '#FFC107');
@@ -64,15 +69,10 @@ function styleDiv(div, width, height) {
     div.style('line-height', `${height}px`);
     div.style('border-radius', '25px');
     div.style('cursor', 'pointer');
-    div.style('box-shadow', '0px 10px rgba(0, 0, 0, 1)');
+    div.style('box-shadow', '0px 8px 10px rgba(0, 0, 0, 0.4)');
 }
 
-// Center Div Helper Function
-function centerDiv(div, yOffset) {
-    div.position((windowWidth - div.width) / 2, yOffset);
-}
-
-// Main Draw Loop to Manage Screens
+// Main draw loop
 function draw() {
     background(255);
     if (screen === 1) drawWelcomeScreen();
@@ -89,28 +89,50 @@ function drawWelcomeScreen() {
 
 // Draw Character Selection Screen
 function drawCharacterSelectScreen() {
-    textAlign(CENTER, CENTER);
-    textSize(32);
-    text('CHOOSE A CHARACTER', width / 2, 50);
+    background(240);
+    createCharacterDivs(); // Create character divs if not created
 
-    for (let i = 0; i < characters.length; i++) {
-        let img = characters[i];
-        let x = width / 2 - 50;
-        let y = 150 + i * 150;
-        image(img, x, y, 100, 100);
-
-        if (touchInImageBounds(x, y, 100, 100)) {
-            selectedCharacter = `char${i + 1}`;
-        }
+    // Display characters in the center
+    let yOffset = windowHeight / 3;
+    for (let i = 0; i < characterDivs.length; i++) {
+        let charDiv = characterDivs[i];
+        centerDiv(charDiv, yOffset);
+        yOffset += 150; // Adjust for spacing
     }
 
-    nextButtonDiv = createDiv('Next');
-    styleDiv(nextButtonDiv, 150, 50);
-    nextButtonDiv.mousePressed(() => {
-        if (selectedCharacter) screen = 3;
-        else alert('Please select a character!');
-    });
-    centerDiv(nextButtonDiv, height - 100);
+    // Add Next button for transition to Main App Screen
+    if (!nextButtonDiv) {
+        nextButtonDiv = createDiv('Next');
+        styleDiv(nextButtonDiv, 150, 50);
+        nextButtonDiv.mousePressed(() => {
+            if (selectedCharacter) {
+                screen = 3;
+                hideCharacterDivs(); // Hide character divs after selection
+                nextButtonDiv.hide();
+            } else alert('Please select a character!');
+        });
+        centerDiv(nextButtonDiv, height - 100);
+    }
+}
+
+// Create character divs dynamically
+function createCharacterDivs() {
+    if (characterDivs.length > 0) return; // Don't recreate divs
+
+    for (let i = 0; i < characters.length; i++) {
+        let charDiv = createDiv('').style('cursor', 'pointer');
+        charDiv.child(createImg(`char${i + 1}.png`).size(150, 150));
+        charDiv.mousePressed(() => {
+            selectedCharacter = `char${i + 1}`;
+            console.log(`Selected: ${selectedCharacter}`);
+        });
+        characterDivs.push(charDiv);
+    }
+}
+
+// Hide character divs
+function hideCharacterDivs() {
+    characterDivs.forEach(div => div.hide());
 }
 
 // Draw Main App Screen
@@ -133,30 +155,15 @@ function drawEnergyBar() {
     energyBarDiv.size(healthWidth, 30);
 }
 
-// Detect Touches within Image Boundaries
-function touchInImageBounds(x, y, imgWidth, imgHeight) {
-    if (touches.length > 0) {
-        let touch = touches[0];
-        return touch.pageX > x && touch.pageX < x + imgWidth &&
-            touch.pageY > y && touch.pageY < y + imgHeight;
-    } else if (mouseIsPressed) {
-        return mouseX > x && mouseX < x + imgWidth &&
-            mouseY > y && mouseY < y + imgHeight;
-    }
-    return false;
-}
-
 // Request Motion Permission (iOS)
 function requestMotionPermission() {
     if (typeof DeviceMotionEvent !== 'undefined' &&
         typeof DeviceMotionEvent.requestPermission === 'function') {
-        DeviceMotionEvent.requestPermission()
-            .then(response => {
-                if (response === 'granted') {
-                    window.addEventListener('devicemotion', handleMotion);
-                } else alert('Motion permission denied.');
-            })
-            .catch(err => alert('Error requesting motion permission: ' + err));
+        DeviceMotionEvent.requestPermission().then(response => {
+            if (response === 'granted') {
+                window.addEventListener('devicemotion', handleMotion);
+            } else alert('Motion permission denied.');
+        }).catch(err => alert('Error: ' + err));
     } else window.addEventListener('devicemotion', handleMotion);
 }
 
@@ -173,14 +180,7 @@ function handleMotion(event) {
     }
 }
 
-// Adjust Health Based on Motion
-function adjustHealth() {
-    if (isStationary && millis() - lastStationaryTime >= 20000) {
-        health = min(100, health + 1);
-    } else health = max(0, health - 0.1);
-}
-
-// Get Appropriate Animation for Health
+// Get Animation for Health
 function getAnimationForHealth() {
     if (health <= 0) return animations[selectedCharacter].sleep;
     if (health <= 10) return animations[selectedCharacter].normal;
