@@ -131,7 +131,7 @@ function styleButton(button, width, height) {
     button.style('line-height', `${height}px`); // Vertically center the text
     button.style('border-radius', '25px'); // Rounded corners
     button.style('cursor', 'pointer'); // Pointer cursor on hover
-    button.style('box-shadow', '0px 5px rgba(0, 0, 0, 0.5)'); // Shadow effect
+    button.style('box-shadow', '0px 7px rgba(0, 0, 0, 1)'); // Shadow effect
 }
 
 
@@ -252,9 +252,9 @@ function drawDebugInfo() {
 // Adjust Health Based on Motion
 function adjustHealth() {
     if (isStationary && millis() - lastStationaryTime >= 20000) {
-        health = min(100, health + 0.1); // Increase health slowly
+        health = min(100, health + 0.05); // Increase health slowly
     } else {
-        health = max(0, health - 0.5); // Decrease health quickly when moving
+        health = max(0, health - 0.1); // Decrease health quickly when moving
     }
 }
 
