@@ -64,7 +64,7 @@ function styleDiv(div, width, height) {
     div.style('line-height', `${height}px`);
     div.style('border-radius', '25px');
     div.style('cursor', 'pointer');
-    div.style('box-shadow', '0px 8px 10px rgba(0, 0, 0, 0.4)');
+    div.style('box-shadow', '0px 10px rgba(0, 0, 0, 1)');
 }
 
 // Center Div Helper Function
