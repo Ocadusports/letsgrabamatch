@@ -46,13 +46,46 @@ function setupWelcomeScreen() {
 
 // Setup Enable Motion Button
 function setupEnableMotionButton() {
-    let motionButton = createDiv('Enable Motion');
-    styleDiv(motionButton, 300, 50);
-    motionButton.mousePressed(requestMotionPermission);
+    let motionButton = createDiv('GIVE PERMISSIONS');
+    styleDiv(motionButton, 300, 50); // Apply initial styling
+
+    motionButton.mousePressed(() => {
+        requestMotionPermission(motionButton); // Pass button for feedback
+    });
+
     centerDiv(motionButton, windowHeight / 1.5);
     motionButton.hide();
     window.motionButton = motionButton;
 }
+
+// Request Motion Permission (iOS) with Feedback
+function requestMotionPermission(motionButton) {
+    if (typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function') {
+        DeviceMotionEvent.requestPermission()
+            .then(response => {
+                if (response === 'granted') {
+                    window.addEventListener('devicemotion', handleMotion);
+                    disableButton(motionButton); // Disable button on success
+                } else {
+                    alert('Motion permission denied.');
+                }
+            })
+            .catch(err => alert('Error requesting motion permission: ' + err));
+    } else {
+        window.addEventListener('devicemotion', handleMotion);
+        disableButton(motionButton); // Disable button if permission not needed
+    }
+}
+
+// Helper function to disable and style the button as grey
+function disableButton(button) {
+    button.style('background-color', 'grey'); // Change to grey
+    button.style('color', 'white'); // Change text color to white
+    button.style('cursor', 'default'); // Change cursor to default
+    button.mousePressed(null); // Remove click functionality
+}
+
 
 // Style Div Helper Function
 function styleDiv(div, width, height) {
