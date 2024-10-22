@@ -2,6 +2,7 @@
 let screen = 1; // Current screen (1: Welcome, 2: Character Selection, 3: Main App)
 let selectedCharacter = null;
 let characters = [];
+let characterButtons = []; // Store image buttons for characters
 let animations = {};
 let titleImg;
 let nextButtonDiv, energyBarDiv;
@@ -31,15 +32,15 @@ function preload() {
 // Setup the canvas and initialize screens
 function setup() {
     createCanvas(windowWidth, windowHeight);
-    setupWelcomeScreen(); // Call the welcome screen setup
-    setupEnableMotionButton(); // Setup motion button for main app screen
+    setupWelcomeScreen();
+    setupEnableMotionButton();
 }
 
-// Setup the Welcome Screen 
+// Setup the Welcome Screen
 function setupWelcomeScreen() {
     nextButtonDiv = createDiv('Next');
     styleDiv(nextButtonDiv, 150, 50);
-    nextButtonDiv.mousePressed(() => screen = 2); // Move to character selection
+    nextButtonDiv.mousePressed(() => screen = 2);
     centerDiv(nextButtonDiv, windowHeight / 2 + 100);
 }
 
@@ -51,25 +52,6 @@ function setupEnableMotionButton() {
     centerDiv(motionButton, windowHeight / 1.5);
     motionButton.hide();
     window.motionButton = motionButton;
-}
-
-// Style Div Helper Function
-function styleDiv(div, width, height) {
-    div.size(width, height);
-    div.style('background-color', '#FFC107');
-    div.style('color', 'black');
-    div.style('font-size', '24px');
-    div.style('font-family', 'Arial, sans-serif');
-    div.style('text-align', 'center');
-    div.style('line-height', `${height}px`);
-    div.style('border-radius', '25px');
-    div.style('cursor', 'pointer');
-    div.style('box-shadow', '0px 10px rgba(0, 0, 0, 1)');
-}
-
-// Center Div Helper Function
-function centerDiv(div, yOffset) {
-    div.position((windowWidth - div.width) / 2, yOffset);
 }
 
 // Main Draw Loop to Manage Screens
@@ -89,33 +71,31 @@ function drawWelcomeScreen() {
 
 // Draw Character Selection Screen
 function drawCharacterSelectScreen() {
-    // Hide the Next button from the Welcome Screen
     if (nextButtonDiv) nextButtonDiv.hide();
 
     textAlign(CENTER, CENTER);
     textSize(32);
     text('CHOOSE A CHARACTER', width / 2, 50);
 
-    for (let i = 0; i < characters.length; i++) {
-        let img = characters[i];
-        let x = width / 2;
-        let y = 200 + i * 150;
-        image(img, x, y, 160, 182);
+    // Create buttons for each character if not already created
+    if (characterButtons.length === 0) {
+        for (let i = 0; i < characters.length; i++) {
+            let x = width / 2 - 80; // Adjust for centering
+            let y = 200 + i * 150;
 
-        if (touchInImageBounds(x, y, 100, 100)) {
-            selectedCharacter = `char${i + 1}`;
+            let button = createImg(`assets/${["Hippo", "Weasel", "Porcupine"][i]}.png`);
+            button.size(160, 182);
+            button.position(x, y);
+            button.mousePressed(() => {
+                selectedCharacter = `char${i + 1}`; // Store the selected character
+                screen = 3; // Move to the main app screen
+            });
+
+            // Store button for potential future use (like hiding or updating)
+            characterButtons.push(button);
         }
     }
-
-    nextButtonDiv = createDiv('Next');
-    styleDiv(nextButtonDiv, 150, 50);
-    nextButtonDiv.mousePressed(() => {
-        if (selectedCharacter) screen = 3;
-        else alert('Please select a character!');
-    });
-    centerDiv(nextButtonDiv, height - 100);
 }
-
 
 // Draw Main App Screen
 function drawMainAppScreen() {
@@ -135,19 +115,6 @@ function drawEnergyBar() {
     }
     let healthWidth = map(health, 0, 100, 0, 200);
     energyBarDiv.size(healthWidth, 30);
-}
-
-// Detect Touches within Image Boundaries
-function touchInImageBounds(x, y, imgWidth, imgHeight) {
-    if (touches.length > 0) {
-        let touch = touches[0];
-        return touch.pageX > x && touch.pageX < x + imgWidth &&
-            touch.pageY > y && touch.pageY < y + imgHeight;
-    } else if (mouseIsPressed) {
-        return mouseX > x && mouseX < x + imgWidth &&
-            mouseY > y && mouseY < y + imgHeight;
-    }
-    return false;
 }
 
 // Request Motion Permission (iOS)
