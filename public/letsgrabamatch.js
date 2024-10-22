@@ -46,7 +46,7 @@ function setupWelcomeScreen() {
 
 // Setup the Enable Motion Button with proper styling
 function setupEnableMotionButton() {
-    let motionButton = createDiv('Enable Motion');
+    let motionButton = createDiv('ENABLE MOTION');
     styleButton(motionButton, 150, 50); // Apply initial styling
 
     motionButton.mousePressed(() => requestMotionPermission(motionButton)); // Handle click
@@ -161,6 +161,7 @@ function drawCharacterSelectScreen() {
 
     textAlign(CENTER, CENTER);
     textSize(32);
+    textStyle(BOLD);
     text('CHOOSE A CHARACTER', width / 2, 50);
 
     // Create buttons for each character if not already created
@@ -193,6 +194,7 @@ function drawMainAppScreen() {
 
     fill(0);
     textSize(32);
+    textStyle(BOLD);
     noStroke();
     textAlign(CENTER);
     text('GO AND PLAY NOW!', width / 2, 50);
